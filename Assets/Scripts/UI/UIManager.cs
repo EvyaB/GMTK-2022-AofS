@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ButtonsPanel buttonsPanel;
 
+    [SerializeField]
+    private StickNoteInfo stickNote;
+
     public void AddCube()
     {
         var obj = Instantiate(cubePrefab);
@@ -25,6 +28,11 @@ public class UIManager : MonoBehaviour
         {
             cube.RollDice();
         }
+    }
+
+    public void ChangeTitle(string newTitle)
+    {
+        stickNote.ChangeTitle(newTitle);
     }
 
     public void ShowButtons(List<KeyCode> buttons, string actionText)

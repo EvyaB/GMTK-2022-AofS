@@ -134,22 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0186c4f38dc3614f80ebdcbe84cbe65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &225579490 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 225579490, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-  m_PrefabInstance: {fileID: 7556978244257943266}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &745804651 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 745804651, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-  m_PrefabInstance: {fileID: 7556978244257943266}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1409834714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -506,8 +490,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 185538170}
     - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
-      propertyPath: actionText
-      value: 'Hook:'
+      propertyPath: minigameTitleText
+      value: DESTROY
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
@@ -518,22 +502,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 225579490, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-      propertyPath: m_Name
-      value: ActionPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 745804649, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-      propertyPath: m_Name
-      value: ActionLabel
-      objectReference: {fileID: 0}
-    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-      propertyPath: actionLabel
-      value: 
-      objectReference: {fileID: 745804651}
-    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
-      propertyPath: actionPanel
-      value: 
-      objectReference: {fileID: 225579490}
     - target: {fileID: 7556978243452480206, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
       propertyPath: m_Name
       value: Canvas

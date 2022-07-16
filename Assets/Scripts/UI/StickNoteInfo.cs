@@ -6,6 +6,7 @@ using TMPro;
 public class StickNoteInfo : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timer;
+    [SerializeField] private TextMeshProUGUI titleLabel;
 
     bool coroutinesRunning = false;
     int currentSeconds = 0;
@@ -43,5 +44,10 @@ public class StickNoteInfo : MonoBehaviour
 
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void ChangeTitle(string newTitle)
+    {
+        titleLabel.text = newTitle;
     }
 }
