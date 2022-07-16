@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
   usableButtons: 7700000061000000730000006400000043010000
+  minigameTitleText: DESTROY
+  actionText: 'Fire:'
