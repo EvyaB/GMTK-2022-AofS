@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 225579493}
   - component: {fileID: 225579492}
   m_Layer: 5
-  m_Name: ShootPanel
+  m_Name: ActionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 745804652}
   - component: {fileID: 745804651}
   m_Layer: 5
-  m_Name: ShootLabel
+  m_Name: ActionLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1060,11 +1060,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de1c10ae9719dd0468f3ad9e49170c53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonLeftMouse: {fileID: 0}
-  buttonW: {fileID: 0}
-  buttonA: {fileID: 0}
-  buttonS: {fileID: 0}
-  buttonD: {fileID: 0}
+  buttonLeftMouse: {fileID: 742146999}
+  buttonW: {fileID: 8532483}
+  buttonA: {fileID: 493014768}
+  buttonS: {fileID: 216111021}
+  buttonD: {fileID: 1116624304}
+  movePanel: {fileID: 757960149}
+  actionPanel: {fileID: 225579490}
+  actionLabel: {fileID: 745804651}
 --- !u!1 &1116624304
 GameObject:
   m_ObjectHideFlags: 0

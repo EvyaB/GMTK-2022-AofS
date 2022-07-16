@@ -27,9 +27,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowButtons(List<KeyCode> buttons)
+    public void ShowButtons(List<KeyCode> buttons, string actionText)
     {
-        buttonsPanel.ShowButtons(buttons);
+        buttonsPanel.ShowButtons(buttons, actionText);
     }
 
     IEnumerator TestDiceRolls()

@@ -7,10 +7,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
 
     [SerializeField] private List<KeyCode> usableButtons;
+    [SerializeField] private string actionText = "Fire:";
 
     private void Start()
     {
-        uiManager.ShowButtons(usableButtons);
+        uiManager.ShowButtons(usableButtons, actionText);
     }
 
     public void FoundDice()
