@@ -5,18 +5,27 @@ using UnityEngine;
 public class GunShot : MonoBehaviour
 {
     private float step;
-    public float speed = 2f;
+    public float speed = 8f;
     public Vector3 direction;
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, direction, step);
+        direction.z = 0;
+        transform.Translate((direction * speed * Time.deltaTime));
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag != "Player")
+            Destroy(gameObject);
     }
 }

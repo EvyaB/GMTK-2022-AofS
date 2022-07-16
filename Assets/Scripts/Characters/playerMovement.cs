@@ -10,10 +10,11 @@ public class playerMovement : MonoBehaviour
     public Vector3 jump;
     public float jumpForce = 2.0f;
     private bool hasFired = false;
-    [SerializeField] float gunFireDelay;
+    [SerializeField] float gunFireDelay = 0f;
 
     public GameObject gunShot;
     GameObject playerGunShot;
+    Shooter s;
 
 
     // Start is called before the first frame update
@@ -21,6 +22,7 @@ public class playerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 1.5f, 0.0f);
+        s = GetComponent<Shooter>();
     }
 
     // Update is called once per frame
@@ -59,23 +61,13 @@ public class playerMovement : MonoBehaviour
         // Shooting
         if (Input.GetMouseButtonDown(0))
         {
-            if (!hasFired)
-            {
-                StartCoroutine(FireGun());
-            }
+            Vector3 InitDir = (transform.position + (transform.forward * 1));
+            InitDir.z = 0;
+            Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            s.Shoot(InitDir, transform.rotation, lookDirection);
         }
     }
 
-    IEnumerator FireGun()
-    {
-        hasFired = true;
-        playerGunShot = Instantiate(gunShot, (transform.position + (transform.forward * 1)), transform.rotation);
-        playerGunShot.active = true;
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        playerGunShot.GetComponent<GunShot>().direction = mousePos;
-        yield return new WaitForSeconds(gunFireDelay);
-        hasFired = false;
-    }
 
     void OnCollisionStay()
     {
