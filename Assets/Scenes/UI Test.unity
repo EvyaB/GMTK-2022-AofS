@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &8532483 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8532483, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+  m_PrefabInstance: {fileID: 7556978244257943266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &185538170 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 432679235113477259, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
@@ -134,6 +139,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0186c4f38dc3614f80ebdcbe84cbe65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &216111021 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 216111021, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+  m_PrefabInstance: {fileID: 7556978244257943266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &493014768 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 493014768, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+  m_PrefabInstance: {fileID: 7556978244257943266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &742146999 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 742146999, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+  m_PrefabInstance: {fileID: 7556978244257943266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1116624304 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1116624304, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+  m_PrefabInstance: {fileID: 7556978244257943266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1409834714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7456151001233002864, guid: a45297c3f7b06564fa94ef30d84c1f5b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7456151001233002864, guid: a45297c3f7b06564fa94ef30d84c1f5b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -489,6 +514,26 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 185538170}
+    - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
+      propertyPath: usableButtons.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
+      propertyPath: usableButtons.Array.data[1]
+      value: 97
+      objectReference: {fileID: 0}
+    - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
+      propertyPath: usableButtons.Array.data[2]
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
+      propertyPath: usableButtons.Array.data[3]
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 942459657986012637, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
+      propertyPath: usableButtons.Array.data[4]
+      value: 323
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef5f9a826f890ae45a21210cc0c6efa0, type: 3}
 --- !u!1001 &7556978244257943266
@@ -498,6 +543,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+      propertyPath: buttonA
+      value: 
+      objectReference: {fileID: 493014768}
+    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+      propertyPath: buttonD
+      value: 
+      objectReference: {fileID: 1116624304}
+    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+      propertyPath: buttonS
+      value: 
+      objectReference: {fileID: 216111021}
+    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+      propertyPath: buttonW
+      value: 
+      objectReference: {fileID: 8532483}
+    - target: {fileID: 1009692763, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
+      propertyPath: buttonLeftMouse
+      value: 
+      objectReference: {fileID: 742146999}
     - target: {fileID: 7556978243452480206, guid: a0af9b3f397edb1489ebb9018c57062e, type: 3}
       propertyPath: m_Name
       value: Canvas

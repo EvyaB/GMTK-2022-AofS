@@ -10,10 +10,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject cubePrefab;
 
-    public void Start()
-    {
-        //StartCoroutine(TestDiceRolls());
-    }
+    [SerializeField]
+    private ButtonsPanel buttonsPanel;
 
     public void AddCube()
     {
@@ -27,6 +25,11 @@ public class UIManager : MonoBehaviour
         {
             cube.RollDice();
         }
+    }
+
+    public void ShowButtons(List<KeyCode> buttons)
+    {
+        buttonsPanel.ShowButtons(buttons);
     }
 
     IEnumerator TestDiceRolls()
