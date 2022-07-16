@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        StartCoroutine(TestDiceRolls());
+        //StartCoroutine(TestDiceRolls());
     }
 
     public void AddCube()
