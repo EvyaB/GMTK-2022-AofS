@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 40399360}
   - component: {fileID: 40399359}
   m_Layer: 0
-  m_Name: Square (2)
+  m_Name: Obstacle 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,7 +214,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 40399358}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: -0.85, z: 0}
+  m_LocalPosition: {x: -1.85, y: -1.5, z: 0}
   m_LocalScale: {x: 4.278, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -314,7 +314,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711509142}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.2}
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 1123237692}
   - component: {fileID: 1123237694}
   m_Layer: 0
-  m_Name: enemy gameobject
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,6 +357,7 @@ MonoBehaviour:
   MinDist: 1
   MaxDist: 10
   bulletGameObject: {fileID: 6055214104797049652, guid: 9d14d4b76fb21a64896fad37a707ae96, type: 3}
+  isTargetVisible: 0
 --- !u!4 &1123237690
 Transform:
   m_ObjectHideFlags: 0
@@ -365,7 +366,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1123237687}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.03, y: -2.92, z: 0}
+  m_LocalPosition: {x: 2.66, y: -3.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -542,7 +543,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178609369}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.81, y: 2.92, z: 0}
+  m_LocalPosition: {x: -3.01, y: 2.92, z: 0}
   m_LocalScale: {x: 4.278, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -561,7 +562,7 @@ GameObject:
   - component: {fileID: 1191312896}
   - component: {fileID: 1191312895}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: Obstacle 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -640,7 +641,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191312894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.21, y: 1.96, z: 0}
+  m_LocalPosition: {x: 2.24, y: 0.87, z: 0}
   m_LocalScale: {x: 4.278, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -659,7 +660,7 @@ GameObject:
   - component: {fileID: 1649960979}
   - component: {fileID: 1649960978}
   m_Layer: 0
-  m_Name: Square (4)
+  m_Name: Obstacle 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -738,7 +739,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649960977}
   m_LocalRotation: {x: -0, y: -0, z: 0.8421443, w: 0.5392523}
-  m_LocalPosition: {x: 4.5, y: 2.17, z: 0}
+  m_LocalPosition: {x: 6.36, y: 3.38, z: 0}
   m_LocalScale: {x: 4.278, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -757,7 +758,7 @@ GameObject:
   - component: {fileID: 1884933909}
   - component: {fileID: 1884933908}
   m_Layer: 0
-  m_Name: Square (3)
+  m_Name: Obstacle 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
