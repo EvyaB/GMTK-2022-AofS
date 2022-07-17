@@ -14,6 +14,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool gameOver = false;
 
+    [SerializeField] private bool hasTimer = true;
+    [SerializeField] private bool loseAtTimerEnd = false;
+    [SerializeField] private float levelTimerSeconds = 20.0f;
+    private Coroutine timerEndCoroutine;
+
     private void Start()
     {
         gameOver = false;
@@ -25,6 +30,48 @@ public class GameManager : MonoBehaviour
 
         uiManager.ChangeTitle(minigameTitleText);
         uiManager.ShowButtons(usableButtons, actionText);
+
+        SetupLevelTimer();
+    }
+
+    public void GetTimerSettings(bool hasTimer, bool loseAtTimerEnd, float timerVal)
+    {
+        this.hasTimer = hasTimer;
+        this.loseAtTimerEnd = loseAtTimerEnd;
+        this.levelTimerSeconds = timerVal;
+
+        SetupLevelTimer();
+    }
+
+    private void SetupLevelTimer()
+    {
+        if (timerEndCoroutine != null)
+        {
+            StopCoroutine(timerEndCoroutine);
+        }
+
+        if (this.hasTimer)
+        {
+            uiManager.ShowTimer(levelTimerSeconds);
+            timerEndCoroutine = StartCoroutine(TimerEndCoroutine());
+        }
+        else
+        {
+            uiManager.HideTimer();
+        }
+    }
+
+    private IEnumerator TimerEndCoroutine()
+    {
+        yield return new WaitForSeconds(levelTimerSeconds);
+        if (loseAtTimerEnd)
+        {
+            GameOver();
+        }
+        else
+        {
+            WinLevel();
+        }
     }
 
     public void WinLevel()

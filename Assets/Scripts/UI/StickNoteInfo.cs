@@ -2,52 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class StickNoteInfo : MonoBehaviour
 {
+    [SerializeField] private GameObject timerPanel;
     [SerializeField] private TextMeshProUGUI timer;
     [SerializeField] private TextMeshProUGUI titleLabel;
 
-    bool coroutinesRunning = false;
-    int currentSeconds = 0;
+    private float timeLeft = 0f;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Update()
     {
-        StartTimer();
-    }
-
-    public void StopTimer()
-    {
-        StopAllCoroutines();
-        coroutinesRunning = false;
-    }
-    public void StartTimer()
-    {
-        if (!coroutinesRunning)
+        if (timeLeft > 0f)
         {
-            StartCoroutine(UpdateTimer());
-            coroutinesRunning = true;
+            timeLeft -= Time.deltaTime;
         }
-    }
-
-    IEnumerator UpdateTimer()
-    {
-        while (true)
+        else
         {
-            currentSeconds++;
-
-            string minutes = Mathf.Floor(currentSeconds / 60).ToString("00");
-            string seconds = Mathf.RoundToInt(currentSeconds % 60).ToString("00");
-
-            timer.text = minutes + ":" + seconds;
-
-            yield return new WaitForSeconds(1);
+            timeLeft = 0.0f;
         }
+
+        timer.text = timeLeft.ToString("0.0");
     }
 
     public void ChangeTitle(string newTitle)
     {
         titleLabel.text = newTitle;
+    }
+
+    internal void HideTimer()
+    {
+        timerPanel.SetActive(false);
+    }
+
+    internal void SetupTimer(float levelTimerSeconds)
+    {
+        timeLeft = levelTimerSeconds;
+        timerPanel.SetActive(true);
+        timer.text = levelTimerSeconds.ToString("0.0");
     }
 }

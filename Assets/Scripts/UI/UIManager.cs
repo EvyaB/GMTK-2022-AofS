@@ -75,4 +75,14 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(2);
         }
     }
+
+    internal void ShowTimer(float levelTimerSeconds)
+    {
+        stickNote.SetupTimer(levelTimerSeconds);
+    }
+
+    internal void HideTimer()
+    {
+        stickNote.HideTimer();
+    }
 }
