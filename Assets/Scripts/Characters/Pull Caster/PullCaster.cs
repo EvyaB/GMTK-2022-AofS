@@ -5,6 +5,7 @@ public class PullCaster : MonoBehaviour
 {
     [SerializeField]
     GameObject hookPrefab;
+    [SerializeField] float safeDistance;
     GameObject hookInstance;
     [SerializeField]
     bool isHookCasted = false;
@@ -28,7 +29,7 @@ public class PullCaster : MonoBehaviour
     {
         if (!isHookCasted && Input.GetKeyDown(KeyCode.Mouse0))
         {
-            hookInstance = Instantiate(hookPrefab, transform.position + transform.right * safeGourd, transform.rotation);
+            hookInstance = Instantiate(hookPrefab, transform.position + transform.right * (safeGourd + safeDistance), transform.rotation);
             isHookCasted = true;
         }
 

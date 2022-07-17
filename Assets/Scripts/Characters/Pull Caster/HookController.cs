@@ -54,8 +54,8 @@ public class HookController : MonoBehaviour
         }
         else
         {
-            var dir = pullCasterInstance.transform.position - transform.position;
-            transform.Translate(dir.normalized * backwardSpeed * Time.deltaTime);
+            var dir = pullCasterInstance.transform.position - gameObject.transform.position;
+            transform.Translate(dir.normalized* backwardSpeed * Time.deltaTime, Space.World);
         }
     }
 }
