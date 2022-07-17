@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1279289207815678384}
   - component: {fileID: 1279289207815678381}
   - component: {fileID: -4850412213112823832}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: GunShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -962820065
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
   m_Color: {r: 0.8113208, g: 0.8113058, b: 0.13394445, a: 1}
@@ -101,7 +101,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 24
+  m_Constraints: 56
   m_CollisionDetection: 0
 --- !u!114 &1279289207815678381
 MonoBehaviour:
