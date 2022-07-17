@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class playerMovement : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class playerMovement : MonoBehaviour
     void Update()
     {
         float xMove = Input.GetAxis("Horizontal");
+        isGrounded = IsGrounded();
+
         if (isTopDown)
         {
             rb.useGravity = false;
@@ -85,6 +88,33 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    private bool IsGrounded()
+    {
+        // Bit shift the index of the Player layer (8) and UI (5) to get a bit mask without the player or the UI
+        int layerMask = 1 << 7;
+        layerMask += 1 << 5;
+
+        // This would cast rays only against colliders in layer 7.
+        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
+        layerMask = ~layerMask;
+
+        var boxCollider = this.GetComponent<BoxCollider>();
+        float distanceDown = 0.1f;
+        if (boxCollider != null)
+        {
+            distanceDown += boxCollider.center.y / 2;
+        }
+        else
+        {
+            var capsuleCollider = this.GetComponent<CapsuleCollider>();
+            distanceDown += capsuleCollider.bounds.size.y / 2;
+        }
+
+        RaycastHit hit;
+        // Does the ray intersect any objects excluding the player and UI layer
+        return (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, distanceDown, layerMask));
+    }
+
     void FixedUpdate()
     {
         float xMove = Input.GetAxis("Horizontal");
@@ -101,17 +131,5 @@ public class playerMovement : MonoBehaviour
         {
             rb.drag = 0f;
         }
-
     }
-
-    void OnCollisionStay()
-    {
-        isGrounded = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        isGrounded = false;
-    }
-
 }
