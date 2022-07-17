@@ -9,6 +9,9 @@ public class CubeUi : MonoBehaviour
     [SerializeField] private int CubeFacesCount = 6;
 
     [SerializeField] private int currentValue = 1;
+    [SerializeField] private DiceType diceType;
+
+    public DiceType GetDiceType() { return diceType; }
 
     public void RollDice()
     {

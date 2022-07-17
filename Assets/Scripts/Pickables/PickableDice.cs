@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PickableDice : Pickable
 {
+    [SerializeField] private DiceType diceType;
+
     private void Update()
     {
         if (this.shouldRotate)
@@ -17,7 +19,7 @@ public class PickableDice : Pickable
         if (!pickedItem && other.tag == "Player")
         {
             pickedItem = true;
-            gameManager.FoundDice();
+            gameManager.FoundDice(diceType);
             Destroy(gameObject, this.destoryDelay);
         }
     }

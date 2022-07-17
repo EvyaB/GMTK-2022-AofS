@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public partial class GameManager : MonoBehaviour
 {
     [SerializeField] private UIManager uiManager;
 
@@ -96,9 +96,9 @@ public class GameManager : MonoBehaviour
         GameOver();
     }
 
-    public void FoundDice()
+    public void FoundDice(DiceType diceType)
     {
-        uiManager.RollDices();
+        uiManager.RollDices(diceType);
     }
     
     private void GameOver()
