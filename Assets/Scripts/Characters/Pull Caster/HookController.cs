@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HookController : MonoBehaviour
@@ -9,21 +7,24 @@ public class HookController : MonoBehaviour
     [SerializeField]
     float backwardSpeed;
     bool isHooked = false;
+    bool onTheWayBack = false;
     PullableObject hookedObj;
     Vector3 relativePositionToHookedObj;
+    PullCaster pullCasterInstance;
 
     // Start is called before the first frame update
     void Start()
     {
-        HookTrigger.returnedEvent.AddListener(() => Destroy(this.gameObject));
+        pullCasterInstance = FindObjectOfType<PullCaster>();
+        HookTrigger.returnedEvent.AddListener(() => Destroy(gameObject));
         PullCaster.castCancelEvent.AddListener(() =>
         {
-            speed = -backwardSpeed;
+            onTheWayBack = true;
             isHooked = false;
         });
         HookTrigger.collisionEvent.AddListener((Collider c) =>
         {
-            speed = -backwardSpeed; // THIS NOT TAKE INTO ACCOUNT PLAYER MPVEMENT
+            onTheWayBack = true;
 
             hookedObj = c.gameObject.GetComponent<PullableObject>();
             if (hookedObj != null)
@@ -39,12 +40,22 @@ public class HookController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.Translate(Vector3.right * speed);
-
 
         if (isHooked)
         {
             hookedObj.transform.position = transform.position + relativePositionToHookedObj;
+        }
+    }
+    private void LateUpdate()
+    {
+        if (!onTheWayBack)
+        {
+            transform.Translate(Vector3.right * speed * Time.deltaTime);
+        }
+        else
+        {
+            var dir = pullCasterInstance.transform.position - transform.position;
+            transform.Translate(dir.normalized * backwardSpeed * Time.deltaTime);
         }
     }
 }
