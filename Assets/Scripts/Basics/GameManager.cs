@@ -88,7 +88,7 @@ public partial class GameManager : MonoBehaviour
     {
         uiManager.ShowGameWon();
         yield return new WaitForSeconds(1.5f);
-        SceneManager.LoadScene(uiManager.GetNextLevelId());
+        SceneManager.LoadScene(uiManager.GetNextLevelId() + 1); // Use Levels 2 - 7 for this?
     }
 
     public void InformPlayerDeath(GameObject gameObject)
