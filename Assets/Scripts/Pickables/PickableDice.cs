@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickableDice : Pickable
 {
     [SerializeField] private DiceType diceType;
+    [SerializeField] private int maxRollValue = 3;
 
     private void Update()
     {
@@ -19,7 +20,7 @@ public class PickableDice : Pickable
         if (other.tag == "Player")
         {
             pickedItem = true;
-            gameManager.FoundDice(diceType);
+            gameManager.FoundDice(diceType, maxRollValue);
         }
     }
 }

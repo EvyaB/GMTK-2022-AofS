@@ -52,9 +52,13 @@ public abstract class Pickable : MonoBehaviour
                 renderer.enabled = true;
                 collider.enabled = true;
             }
-            if (shouldDestroy)
+            else if (shouldDestroy)
             {
                 Destroy(gameObject, this.destoryDelay);
+            }
+            else
+            {
+                Destroy(this); // don't allow picking this again, but don't destroy the object
             }
         }
     }

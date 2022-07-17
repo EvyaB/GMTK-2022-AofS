@@ -96,9 +96,9 @@ public partial class GameManager : MonoBehaviour
         GameOver();
     }
 
-    public void FoundDice(DiceType diceType)
+    public void FoundDice(DiceType diceType, int maxVal)
     {
-        uiManager.RollDices(diceType);
+        uiManager.RollDices(diceType, maxVal);
     }
     
     private void GameOver()
