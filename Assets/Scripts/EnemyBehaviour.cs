@@ -12,32 +12,49 @@ public class EnemyBehaviour : MonoBehaviour
 
     bool isTryingToFindPlayer = true;
     string goingAroundObject = "";
+    const float MAX_DELAY = 0.3f;
+    public float shotDelay = MAX_DELAY;
+    float timeSincePrevoiusShot = 0;
+
+    Shooter shooter;
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 direction = target.transform.position - transform.position;
-        direction.Normalize();
-        transform.LookAt(gameObject.transform, direction);
+        //Vector2 direction = target.transform.position - transform.position;
+        //direction.Normalize();
+        //transform.LookAt(gameObject.transform, direction);
+        shooter = GetComponent<Shooter>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //transform.LookAt(target.transform.position);
+        var targetDir = target.transform.position - transform.position;
+        targetDir.Normalize();
+        float zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, zAngle);
         if (checkIfPlayerIsSeen())
         {
             isTargetVisible = true;
-            transform.LookAt(target.transform.position);
             float distance = Vector2.Distance(transform.position, target.transform.position);
             if (distance >= MinDist)
             {
                 isTryingToFindPlayer = false;
                 transform.position += transform.forward * MoveSpeed * Time.deltaTime;
 
-                if (distance <= MaxDist)
+                if (distance <= MaxDist && timeSincePrevoiusShot<=0)
                 {
                     //Shoot
-
+                    print("Shoot");
+                    //Vector3 direction = target.transform.position - transform.position;
+                    Vector3 direction = Vector3.right;
+                    direction.z = 0;
+                    Vector3 position = transform.position;
+                    position.z = 0;
+                    shooter.Shoot(position, transform.rotation, direction);
+                    timeSincePrevoiusShot = shotDelay;
                 }
             }
         }
@@ -47,7 +64,6 @@ public class EnemyBehaviour : MonoBehaviour
             if (isTryingToFindPlayer == false)
                 isTryingToFindPlayer = true;
             //Try to find player
-            transform.LookAt(target.transform.position);
             if (Vector2.Distance(transform.position, target.transform.position) >= MinDist && isTryingToFindPlayer)
             {
                 Vector3 newDirection = findNewDirection();
@@ -57,6 +73,7 @@ public class EnemyBehaviour : MonoBehaviour
                     transform.position += transform.forward * MoveSpeed * Time.deltaTime;
             }
         }
+        timeSincePrevoiusShot-= Time.deltaTime;
     }
 
     private Vector2 findNewDirection()
