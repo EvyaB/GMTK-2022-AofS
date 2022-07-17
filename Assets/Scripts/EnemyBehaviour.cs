@@ -75,7 +75,7 @@ public class EnemyBehaviour : MonoBehaviour
                 // enemy can see the player!
                 if (goingAroundObject == "")
                     goingAroundObject = hit.transform.name;
-                else if (goingAroundObject != hit.transform.name)
+                else if (goingAroundObject != hit.transform.name && !hit.transform.name.StartsWith("Border"))
                 {
                     goingAroundObject = "";
                     return directionToPlayer;
@@ -96,7 +96,7 @@ public class EnemyBehaviour : MonoBehaviour
                 // enemy can see the player!
                 if (goingAroundObject == "")
                     goingAroundObject = hit.transform.name;
-                else if (goingAroundObject != hit.transform.name)
+                else if (goingAroundObject != hit.transform.name && !hit.transform.name.StartsWith("Border"))
                 {
                     goingAroundObject = "";
                     return directionToPlayer;
@@ -112,20 +112,20 @@ public class EnemyBehaviour : MonoBehaviour
 
     private bool checkIfPlayerIsSeen()
     {
-        RaycastHit hit, hit2;
-        Vector3 positionOfRightCorener = transform.position + transform.GetComponent<BoxCollider>().size / 2;
+        RaycastHit hit, hit2; 
+         Vector3 positionOfRightCorener = transform.position + transform.GetComponent<BoxCollider>().size / 2;
         var rayDirection = -target.transform.position + positionOfRightCorener;
-        Debug.DrawRay(positionOfRightCorener, rayDirection);
-        if (Physics.Raycast(positionOfRightCorener, rayDirection, out hit))
+        Debug.DrawRay(positionOfRightCorener, -rayDirection);
+        if (Physics.Raycast(positionOfRightCorener, -rayDirection, out hit))
         {
-            if (hit.transform.name == target.name)
+            if (hit.transform.name == target.name && !hit.transform.name.StartsWith("Border"))
             {
                 // enemy can see the player!
                 Vector3 positionOfLeftCorener = transform.position - GetComponent<BoxCollider>().size / 2;
                 var rayDirection2 = - target.transform.position + positionOfLeftCorener;
-                Debug.DrawRay(positionOfLeftCorener, rayDirection2);
-                if (Physics.Raycast(positionOfLeftCorener, rayDirection2, out hit2))
-                    if (hit2.transform.name == target.name)
+                Debug.DrawRay(positionOfLeftCorener, -rayDirection2);
+                if (Physics.Raycast(positionOfLeftCorener, -rayDirection2, out hit2))
+                    if (hit2.transform.name == target.name && !hit2.transform.name.StartsWith("Border"))
                     {
                         return true;
                     }
