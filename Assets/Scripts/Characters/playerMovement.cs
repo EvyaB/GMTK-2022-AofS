@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class playerMovement : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class playerMovement : MonoBehaviour
     public Vector3 jump = new Vector3(0.0f, 3.0f, 0.0f);
     public float jumpForce = 2.0f;
 
+    public int maxJumpCounts = 1;
+
+    private int remainingJumps = 1;
+
     public float movementAcceleration = 50f;
     public float maxMoveSpeed = 12f;
 
@@ -21,6 +26,13 @@ public class playerMovement : MonoBehaviour
 
     bool isGrounded = false;
     Rigidbody rb;
+
+    public float minimumTimeBetweenJumps = 0.3f;
+    float timerSinceLastJump = 0.0f;
+
+    public float maxCoyoteTime = 0.2f;
+    float timeSinceLeftPlatform = 0.0f;
+    bool wasOnGround = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,10 +44,12 @@ public class playerMovement : MonoBehaviour
     void Update()
     {
         float xMove = Input.GetAxis("Horizontal");
+        isGrounded = IsGrounded();
+
         if (isTopDown)
         {
             rb.useGravity = false;
-
+            maxJumpCounts = 0; // can't jump in top down game
             canJump = false;
 
             //Movement
@@ -63,13 +77,33 @@ public class playerMovement : MonoBehaviour
         }
 
         // Jumping 
+        // Reset jumps count if on the ground
+        if (isGrounded && timerSinceLastJump <= 0.0f)
+        {
+            wasOnGround = true;
+            timeSinceLeftPlatform = 0.0f;
+            remainingJumps = maxJumpCounts;
+        }
+        else if (!isGrounded && wasOnGround)
+        {
+            wasOnGround = false;
+            timeSinceLeftPlatform = maxCoyoteTime;
+        }
+        else if (!isGrounded)
+        {
+            timeSinceLeftPlatform -= Time.deltaTime;
+        }
+
         if (canJump)
         {
-            // Jump
-            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && isGrounded)
+            timerSinceLastJump -= Time.deltaTime;
+
+            // Jump if possible and pressing jump button
+            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && remainingJumps > 0 && timerSinceLastJump <= 0.0f && (isGrounded || timeSinceLeftPlatform  >= 0.0f))
             {
+                timerSinceLastJump = minimumTimeBetweenJumps;
+                remainingJumps--;
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-                isGrounded = false;
             }
         }
 
@@ -83,6 +117,42 @@ public class playerMovement : MonoBehaviour
             // jumping (and possibly holding button for long/short jump)
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+    }
+
+    private bool IsGrounded()
+    {
+        // Bit shift the index of the Player layer (8) and UI (5) to get a bit mask without the player or the UI
+        int layerMask = 1 << 7;
+        layerMask += 1 << 5;
+
+        // This would cast rays only against colliders in layer 7.
+        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
+        layerMask = ~layerMask;
+
+        var boxCollider = this.GetComponent<BoxCollider>();
+        float distanceDown = 0.01f;
+        if (boxCollider != null)
+        {
+            distanceDown += boxCollider.center.y / 2;
+        }
+        else
+        {
+            var capsuleCollider = this.GetComponent<CapsuleCollider>();
+            distanceDown += capsuleCollider.bounds.size.y / 2;
+        }
+
+        RaycastHit hit;
+        // Does the ray intersect any objects excluding the player and UI layer
+        return (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, distanceDown, layerMask));
+    }
+
+    private void OnDrawGizmos()
+    {
+        float distanceDown = 0.01f;
+        var capsuleCollider = this.GetComponent<CapsuleCollider>();
+        distanceDown += capsuleCollider.bounds.size.y / 2;
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * distanceDown);
     }
 
     void FixedUpdate()
@@ -101,17 +171,5 @@ public class playerMovement : MonoBehaviour
         {
             rb.drag = 0f;
         }
-
     }
-
-    void OnCollisionStay()
-    {
-        isGrounded = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        isGrounded = false;
-    }
-
 }

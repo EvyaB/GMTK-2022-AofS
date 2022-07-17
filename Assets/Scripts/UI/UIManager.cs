@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,14 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private StickNoteInfo stickNote;
+
+    [SerializeField]
+    private GameObject gameOverPanel;
+
+    private void Start()
+    {
+        gameOverPanel.SetActive(false);
+    }
 
     public void AddCube()
     {
@@ -38,6 +47,11 @@ public class UIManager : MonoBehaviour
     public void ShowButtons(List<KeyCode> buttons, string actionText)
     {
         buttonsPanel.ShowButtons(buttons, actionText);
+    }
+
+    internal void ShowGameOver()
+    {
+        gameOverPanel.SetActive(true);
     }
 
     IEnumerator TestDiceRolls()
