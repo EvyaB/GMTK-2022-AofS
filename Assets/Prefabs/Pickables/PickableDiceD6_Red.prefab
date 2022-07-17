@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7456151001238531632}
   - component: {fileID: 233060404}
   m_Layer: 12
-  m_Name: PickableDiceD6
+  m_Name: PickableDiceD6_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

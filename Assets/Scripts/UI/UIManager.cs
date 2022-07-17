@@ -35,11 +35,14 @@ public class UIManager : MonoBehaviour
         cubes.Add(obj.GetComponent<CubeUi>());
     }
 
-    public void RollDices()
+    public void RollDices(DiceType diceType)
     {
         foreach (CubeUi cube in cubes)
         {
-            cube.RollDice();
+            if (cube.GetDiceType() == diceType)
+            {
+                cube.RollDice();
+            }
         }
     }
 
@@ -71,8 +74,18 @@ public class UIManager : MonoBehaviour
     {
         while (true)
         {
-            RollDices();
+            RollDices(DiceType.Minigame);
             yield return new WaitForSeconds(2);
         }
+    }
+
+    internal void ShowTimer(float levelTimerSeconds)
+    {
+        stickNote.SetupTimer(levelTimerSeconds);
+    }
+
+    internal void HideTimer()
+    {
+        stickNote.HideTimer();
     }
 }

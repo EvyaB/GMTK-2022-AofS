@@ -1200,7 +1200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &902884366
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1992,6 +1992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0428c6a0d1a93b44bbcbfd2dbfdd006b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerPanel: {fileID: 8535355957359627789}
   timer: {fileID: 7915786622357791434}
   titleLabel: {fileID: 1990191909}
 --- !u!1 &3259959264514040761
@@ -2195,7 +2196,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00:00
+  m_text: 20.0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e4adccd99f86e74c815f391015db523, type: 2}
   m_sharedMaterial: {fileID: -7982444651608564355, guid: 1e4adccd99f86e74c815f391015db523, type: 2}
@@ -2770,6 +2771,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7556978245440605006}
     m_Modifications:
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359579215761, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_Color.b
+      value: 0.02264148
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359579215761, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_Color.g
+      value: 0.79049796
+      objectReference: {fileID: 0}
     - target: {fileID: 4504543359579215763, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2856,7 +2877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4504543359579215772, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Name
-      value: Cube2
+      value: YellowDice
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
@@ -2883,6 +2904,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7556978245440605006}
     m_Modifications:
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: diceType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4504543359579215763, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2969,7 +3006,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4504543359579215772, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Name
-      value: Cube1
+      value: RedDice
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
