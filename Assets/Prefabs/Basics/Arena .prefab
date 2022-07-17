@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2219714906924908889}
   - component: {fileID: 2219714906924908890}
   - component: {fileID: 2219714906924908891}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Arena Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 2219714907102217156}
   - component: {fileID: 2219714907102217157}
   - component: {fileID: 2219714907102217158}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Arena Fence (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 2219714907321254863}
   - component: {fileID: 2219714907321254848}
   - component: {fileID: 2219714907321254849}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Arena Fence (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,7 +443,7 @@ GameObject:
   - component: {fileID: 2219714907672806957}
   - component: {fileID: 2219714907672806958}
   - component: {fileID: 2219714907672806959}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Arena Fence (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -573,7 +573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2219714908973265944}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Arena Fences
   m_TagString: Untagged
   m_Icon: {fileID: 0}

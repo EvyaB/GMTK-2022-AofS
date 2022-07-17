@@ -6,6 +6,7 @@ using TMPro;
 public class ButtonsPanel : MonoBehaviour
 {
     [SerializeField] private GameObject buttonLeftMouse;
+    [SerializeField] private GameObject buttonSpaceBar;
     [SerializeField] private GameObject buttonW;
     [SerializeField] private GameObject buttonA;
     [SerializeField] private GameObject buttonS;
@@ -27,6 +28,10 @@ public class ButtonsPanel : MonoBehaviour
             {
                 case KeyCode.Mouse0:
                     buttonLeftMouse.SetActive(true);
+                    hasAction = true;
+                    break;
+                case KeyCode.Space:
+                    buttonSpaceBar.SetActive(true);
                     hasAction = true;
                     break;
                 case KeyCode.W:
@@ -61,6 +66,7 @@ public class ButtonsPanel : MonoBehaviour
         canMove = false;
 
         buttonLeftMouse.SetActive(false);
+        buttonSpaceBar.SetActive(false);
         buttonW.SetActive(false);
         buttonA.SetActive(false);
         buttonS.SetActive(false);
