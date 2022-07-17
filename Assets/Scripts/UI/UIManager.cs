@@ -20,9 +20,13 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverPanel;
 
+    [SerializeField]
+    private GameObject gameWonPanel;
+
     private void Start()
     {
         gameOverPanel.SetActive(false);
+        gameWonPanel.SetActive(false);
     }
 
     public void AddCube()
@@ -44,6 +48,11 @@ public class UIManager : MonoBehaviour
         stickNote.ChangeTitle(newTitle);
     }
 
+    public int GetNextLevelId()
+    {
+        return cubes[0].GetCurrentValue();
+    }
+
     public void ShowButtons(List<KeyCode> buttons, string actionText)
     {
         buttonsPanel.ShowButtons(buttons, actionText);
@@ -52,6 +61,10 @@ public class UIManager : MonoBehaviour
     internal void ShowGameOver()
     {
         gameOverPanel.SetActive(true);
+    }
+    internal void ShowGameWon()
+    {
+        gameWonPanel.SetActive(true);
     }
 
     IEnumerator TestDiceRolls()
