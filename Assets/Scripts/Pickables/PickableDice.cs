@@ -14,13 +14,12 @@ public class PickableDice : Pickable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnPickup(Collider other)
     {
-        if (!pickedItem && other.tag == "Player")
+        if (other.tag == "Player")
         {
             pickedItem = true;
             gameManager.FoundDice(diceType);
-            Destroy(gameObject, this.destoryDelay);
         }
     }
 }

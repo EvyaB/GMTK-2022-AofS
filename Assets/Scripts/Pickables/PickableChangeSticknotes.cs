@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeSticknotes : Pickable
+public class PickableChangeSticknotes : Pickable
 {
     [SerializeField] private GameObject disappearSticknote;
     [SerializeField] private GameObject appearSticknote;
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnPickup(Collider other)
     {
-        if (!pickedItem && other.tag == "Player")
+        if (other.tag == "Player")
         {
+            pickedItem = true;
             disappearSticknote?.SetActive(false);
             appearSticknote?.SetActive(true);
-            Destroy(gameObject, this.destoryDelay);
         }
     }
 }
