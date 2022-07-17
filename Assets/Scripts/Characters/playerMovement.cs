@@ -14,6 +14,10 @@ public class playerMovement : MonoBehaviour
     public Vector3 jump = new Vector3(0.0f, 3.0f, 0.0f);
     public float jumpForce = 2.0f;
 
+    public int maxJumpCounts = 1;
+
+    private int remainingJumps = 1;
+
     public float movementAcceleration = 50f;
     public float maxMoveSpeed = 12f;
 
@@ -22,6 +26,13 @@ public class playerMovement : MonoBehaviour
 
     bool isGrounded = false;
     Rigidbody rb;
+
+    public float minimumTimeBetweenJumps = 0.3f;
+    float timerSinceLastJump = 0.0f;
+
+    public float maxCoyoteTime = 0.2f;
+    float timeSinceLeftPlatform = 0.0f;
+    bool wasOnGround = false;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +49,7 @@ public class playerMovement : MonoBehaviour
         if (isTopDown)
         {
             rb.useGravity = false;
-
+            maxJumpCounts = 0; // can't jump in top down game
             canJump = false;
 
             //Movement
@@ -66,13 +77,33 @@ public class playerMovement : MonoBehaviour
         }
 
         // Jumping 
+        // Reset jumps count if on the ground
+        if (isGrounded && timerSinceLastJump <= 0.0f)
+        {
+            wasOnGround = true;
+            timeSinceLeftPlatform = 0.0f;
+            remainingJumps = maxJumpCounts;
+        }
+        else if (!isGrounded && wasOnGround)
+        {
+            wasOnGround = false;
+            timeSinceLeftPlatform = maxCoyoteTime;
+        }
+        else if (!isGrounded)
+        {
+            timeSinceLeftPlatform -= Time.deltaTime;
+        }
+
         if (canJump)
         {
-            // Jump
-            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && isGrounded)
+            timerSinceLastJump -= Time.deltaTime;
+
+            // Jump if possible and pressing jump button
+            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && remainingJumps > 0 && timerSinceLastJump <= 0.0f && (isGrounded || timeSinceLeftPlatform  >= 0.0f))
             {
+                timerSinceLastJump = minimumTimeBetweenJumps;
+                remainingJumps--;
                 rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-                isGrounded = false;
             }
         }
 
@@ -99,7 +130,7 @@ public class playerMovement : MonoBehaviour
         layerMask = ~layerMask;
 
         var boxCollider = this.GetComponent<BoxCollider>();
-        float distanceDown = 0.1f;
+        float distanceDown = 0.01f;
         if (boxCollider != null)
         {
             distanceDown += boxCollider.center.y / 2;
@@ -113,6 +144,15 @@ public class playerMovement : MonoBehaviour
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player and UI layer
         return (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, distanceDown, layerMask));
+    }
+
+    private void OnDrawGizmos()
+    {
+        float distanceDown = 0.01f;
+        var capsuleCollider = this.GetComponent<CapsuleCollider>();
+        distanceDown += capsuleCollider.bounds.size.y / 2;
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * distanceDown);
     }
 
     void FixedUpdate()
