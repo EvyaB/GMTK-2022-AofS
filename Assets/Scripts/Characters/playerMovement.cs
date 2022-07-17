@@ -7,22 +7,17 @@ public class playerMovement : MonoBehaviour
     public bool isTopDown = false;
     bool isGrounded = false;
     Rigidbody rb;
-    public Vector3 jump;
+    public Vector3 jump = new Vector3(0.0f, 3.0f, 0.0f);
     public float jumpForce = 2.0f;
-    private bool hasFired = false;
     [SerializeField] float gunFireDelay = 0f;
 
     public GameObject gunShot;
-    GameObject playerGunShot;
-    Shooter s;
 
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 1.5f, 0.0f);
-        s = GetComponent<Shooter>();
     }
 
     // Update is called once per frame
@@ -53,21 +48,11 @@ public class playerMovement : MonoBehaviour
 
         // Jumping 
         if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && isGrounded)
-         {
+        {
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-          } 
-
-        // Shooting
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 InitDir = (transform.position + (transform.forward * 1));
-            InitDir.z = 0;
-            Vector3 lookDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            s.Shoot(InitDir, transform.rotation, lookDirection);
         }
     }
-
 
     void OnCollisionStay()
     {
