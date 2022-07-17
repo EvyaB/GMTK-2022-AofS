@@ -15,12 +15,14 @@ public class EnemyBehaviour : MonoBehaviour
     const float MAX_DELAY = 0.3f;
     public float shotDelay = MAX_DELAY;
     float timeSincePrevoiusShot = 0;
+    BoxCollider bc;
 
     Shooter shooter;
 
     // Start is called before the first frame update
     void Start()
     {
+        bc = GetComponent<BoxCollider>();
         //Vector2 direction = target.transform.position - transform.position;
         //direction.Normalize();
         //transform.LookAt(gameObject.transform, direction);
@@ -30,11 +32,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //transform.LookAt(target.transform.position);
-        var targetDir = target.transform.position - transform.position;
-        targetDir.Normalize();
-        float zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, zAngle);
+        LookAtTarget();
         if (checkIfPlayerIsSeen())
         {
             isTargetVisible = true;
@@ -42,13 +40,11 @@ public class EnemyBehaviour : MonoBehaviour
             if (distance >= MinDist)
             {
                 isTryingToFindPlayer = false;
-                transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+                transform.position += transform.right * MoveSpeed * Time.deltaTime;
 
-                if (distance <= MaxDist && timeSincePrevoiusShot<=0)
+                if (distance <= MaxDist && timeSincePrevoiusShot <= 0)
                 {
                     //Shoot
-                    print("Shoot");
-                    //Vector3 direction = target.transform.position - transform.position;
                     Vector3 direction = Vector3.right;
                     direction.z = 0;
                     Vector3 position = transform.position;
@@ -70,10 +66,24 @@ public class EnemyBehaviour : MonoBehaviour
                 if (newDirection.x != 0 || newDirection.y != 0)
                     transform.position += newDirection * MoveSpeed * Time.deltaTime;
                 else
-                    transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+                    transform.position += transform.right * MoveSpeed * Time.deltaTime;
             }
         }
-        timeSincePrevoiusShot-= Time.deltaTime;
+        timeSincePrevoiusShot -= Time.deltaTime;
+    }
+
+    private void LookAtTarget()
+    {
+        //transform.LookAt(target.transform.position);
+        var targetDir = target.transform.position - transform.position;
+        targetDir.Normalize();
+        float zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, zAngle);
+    }
+
+    void findNewDirectionHelp()
+    {
+
     }
 
     private Vector2 findNewDirection()
@@ -131,10 +141,10 @@ public class EnemyBehaviour : MonoBehaviour
     {
         RaycastHit[] hits, hits2;
         RaycastHit hit, hit2;
-        Vector3 positionOfRightCorener = transform.position + transform.GetComponent<BoxCollider>().size / 2 + new Vector3(0,-0.3f,0);
-        var rayDirection = -target.transform.position + positionOfRightCorener;
-        Debug.DrawRay(positionOfRightCorener, -rayDirection);
-        hits = Physics.RaycastAll(positionOfRightCorener, -rayDirection);
+        Vector3 positionOfRightCorener = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * transform.up);
+        var rayDirection = target.transform.position - positionOfRightCorener;
+        Debug.DrawRay(positionOfRightCorener, rayDirection, Color.red, 0.1f, false);
+        hits = Physics.RaycastAll(positionOfRightCorener, rayDirection, 10);
         if (hits.Length!=0)
         {
             int i = 0;
@@ -155,12 +165,10 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 // enemy can see the player!
                 Vector3 offset = GetComponent<BoxCollider>().size / 2;
-                offset.x = -offset.x;
-                offset.y = offset.y - +0.3f;
-                Vector3 positionOfLeftCorener = transform.position + offset;
-                var rayDirection2 = - target.transform.position + positionOfLeftCorener;
-                Debug.DrawRay(positionOfLeftCorener, -rayDirection2);
-                hits2 = Physics.RaycastAll(positionOfLeftCorener, -rayDirection2);
+                Vector3 positionOfLeftCorener = transform.position - (offset.x * transform.right);
+                var rayDirection2 = target.transform.position - positionOfLeftCorener;
+                Debug.DrawRay(positionOfLeftCorener, rayDirection2);
+                hits2 = Physics.RaycastAll(positionOfLeftCorener, rayDirection2);
                 if (hits2.Length != 0)
                 {
                     int i2 = 0;
