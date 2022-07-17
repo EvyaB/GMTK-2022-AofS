@@ -130,5 +130,9 @@ MonoBehaviour:
   shouldRotate: 1
   rotationSpeed: 30
   rotationDirection: {x: -1, y: 0, z: 0}
+  shouldRespawn: 0
+  shouldDestroy: 1
   destoryDelay: 0.1
+  respawnDelay: 5
   diceType: 1
+  maxRollValue: 6

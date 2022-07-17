@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3171788134512985377}
   - component: {fileID: 3171788134512985382}
   - component: {fileID: 1540326540}
+  - component: {fileID: 6389350193777068653}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3171788134512985387}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.6, y: -1.39, z: -0.059890326}
-  m_LocalScale: {x: 0.5634661, y: 0.5634661, z: 0.5634661}
+  m_LocalScale: {x: 0.37919012, y: 0.37919012, z: 0.37919012}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,14 +64,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   isTopDown: 0
-  fallMultiplier: 3
-  lowJumpMultiplier: 2
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 1.75
   canJump: 1
-  jump: {x: 0, y: 3, z: 0}
-  jumpForce: 3
+  jump: {x: 0, y: 2.5, z: 0}
+  jumpForce: 2.5
   maxJumpCounts: 1
-  movementAcceleration: 10
-  maxMoveSpeed: 5
+  movementAcceleration: 8
+  maxMoveSpeed: 4
   linearDrag: 0.834
   minimumTimeBetweenJumps: 0.3
   maxCoyoteTime: 0.2
@@ -110,7 +111,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,3 +143,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6389350193777068653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3171788134512985387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderTypes: 0
+  normalStrength: 5
+  normalSmoothing: 1
+  computingNormal: 0

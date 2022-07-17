@@ -2791,6 +2791,10 @@ PrefabInstance:
       propertyPath: m_Color.g
       value: 0.79049796
       objectReference: {fileID: 0}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: cubeText
+      value: 
+      objectReference: {fileID: 3932534057157511265}
     - target: {fileID: 4504543359579215763, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2881,6 +2885,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+--- !u!1 &3932534057157511265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4504543359337258442, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+  m_PrefabInstance: {fileID: 581088261994943915}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3932534057430925880 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4504543359579215763, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
@@ -2917,9 +2926,25 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: cubeText
+      value: 
+      objectReference: {fileID: 7556978245537055235}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: diceType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: hideMinigameIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: adce45105552071409c959137cb5b670, type: 3}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: tankMinigameIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: bd6f48b4407043345b1a3a07df8c4d61, type: 3}
+    - target: {fileID: 4504543359579215762, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+      propertyPath: platformMinigameIcon
+      value: 
+      objectReference: {fileID: -390831446, guid: 6d5723e4571460246822919ef05ab4f3, type: 3}
     - target: {fileID: 4504543359579215763, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3008,7 +3033,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: RedDice
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4504543359337258440, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
 --- !u!224 &7556978243499411546 stripped
 RectTransform:
@@ -3026,3 +3052,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e5f662e992f7b1468d148432d1ec59b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7556978245537055235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4504543359337258442, guid: b68e22613a7f4c34d99be6ad8ae72cbe, type: 3}
+  m_PrefabInstance: {fileID: 6223022496215670729}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2136344222000017969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7556978245537055235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -390831446, guid: 6d5723e4571460246822919ef05ab4f3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1

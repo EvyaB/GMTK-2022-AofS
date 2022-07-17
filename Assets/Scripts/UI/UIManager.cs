@@ -35,13 +35,13 @@ public class UIManager : MonoBehaviour
         cubes.Add(obj.GetComponent<CubeUi>());
     }
 
-    public void RollDices(DiceType diceType)
+    public void RollDices(DiceType diceType, int maxVal)
     {
         foreach (CubeUi cube in cubes)
         {
             if (cube.GetDiceType() == diceType)
             {
-                cube.RollDice();
+                cube.RollDice(maxVal);
             }
         }
     }
@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
     {
         while (true)
         {
-            RollDices(DiceType.Minigame);
+            RollDices(DiceType.Minigame, 3);
             yield return new WaitForSeconds(2);
         }
     }

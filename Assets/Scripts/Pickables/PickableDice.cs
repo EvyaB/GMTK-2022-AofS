@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickableDice : Pickable
 {
     [SerializeField] private DiceType diceType;
+    [SerializeField] private int maxRollValue = 3;
 
     private void Update()
     {
@@ -14,13 +15,12 @@ public class PickableDice : Pickable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected override void OnPickup(Collider other)
     {
-        if (!pickedItem && other.tag == "Player")
+        if (other.tag == "Player")
         {
             pickedItem = true;
-            gameManager.FoundDice(diceType);
-            Destroy(gameObject, this.destoryDelay);
+            gameManager.FoundDice(diceType, maxRollValue);
         }
     }
 }
