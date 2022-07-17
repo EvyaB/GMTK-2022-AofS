@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
+
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -58,15 +60,21 @@ public class EnemyBehaviour : MonoBehaviour
         {
             isTargetVisible = false;
             if (isTryingToFindPlayer == false)
+            {
                 isTryingToFindPlayer = true;
+            }
             //Try to find player
             if (Vector2.Distance(transform.position, target.transform.position) >= MinDist && isTryingToFindPlayer)
             {
                 Vector3 newDirection = findNewDirection();
                 if (newDirection.x != 0 || newDirection.y != 0)
+                {
                     transform.position += newDirection * MoveSpeed * Time.deltaTime;
+                }
                 else
+                {
                     transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                }
             }
         }
         timeSincePrevoiusShot -= Time.deltaTime;
@@ -101,8 +109,10 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 // enemy can see the player!
                 if (goingAroundObject == "")
+                {
                     goingAroundObject = hit.transform.name;
-                else if (goingAroundObject != hit.transform.name )
+                }
+                else if (goingAroundObject != hit.transform.name)
                 {
                     goingAroundObject = "";
                     return directionToPlayer;
@@ -122,7 +132,9 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 // enemy can see the player!
                 if (goingAroundObject == "")
+                {
                     goingAroundObject = hit2.transform.name;
+                }
                 else if (goingAroundObject != hit2.transform.name)
                 {
                     goingAroundObject = "";
@@ -144,49 +156,60 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 positionOfRightCorener = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * transform.up);
         var rayDirection = target.transform.position - positionOfRightCorener;
         Debug.DrawRay(positionOfRightCorener, rayDirection, Color.red, 0.1f, false);
-        hits = Physics.RaycastAll(positionOfRightCorener, rayDirection, 10);
-        if (hits.Length!=0)
+        hits = Physics.RaycastAll(positionOfRightCorener, rayDirection);
+        if (hits.Length != 0)
         {
-            int i = 0;
+            int i;
             hit = hits[0];
-            for (; i < hits.Length; i++)
+            Array.Sort(hits, (x, y) =>
             {
-                if (hits[i].transform.name == transform.name || hits[i].transform.name.StartsWith("Border")) {
-                    i++;
-                }
-                else {
+                var distanceX = transform.position - x.transform.position;
+                var distancey = transform.position - y.transform.position;
+                return distanceX.magnitude.CompareTo(distancey.magnitude);
+            });
+            for (i = 0; i < hits.Length; i++)
+            {
+                if (!(hits[i].transform.name == transform.name || hits[i].transform.name.StartsWith("Border")))
+                {
                     hit = hits[i];
                     break;
                 }
             }
             if (i == hits.Length)
+            {
                 return false;
+            }
             if (hit.transform.name == target.name)
             {
                 // enemy can see the player!
                 Vector3 offset = GetComponent<BoxCollider>().size / 2;
-                Vector3 positionOfLeftCorener = transform.position - (offset.x * transform.right);
+                Vector3 positionOfLeftCorener = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * -transform.up);
                 var rayDirection2 = target.transform.position - positionOfLeftCorener;
                 Debug.DrawRay(positionOfLeftCorener, rayDirection2);
                 hits2 = Physics.RaycastAll(positionOfLeftCorener, rayDirection2);
+                Array.Sort(hits2, (x, y) =>
+                {
+                    var distanceX = transform.position - x.transform.position;
+                    var distancey = transform.position - y.transform.position;
+                    return distanceX.magnitude.CompareTo(distancey.magnitude);
+                });
                 if (hits2.Length != 0)
                 {
                     int i2 = 0;
                     hit2 = hits2[0];
-                    for (; i2 < hits2.Length; i2++)
+                    for (i2 = 0; i2 < hits2.Length; i2++)
                     {
-                        if (hits2[i2].transform.name == transform.name || hits2[i2].transform.name.StartsWith("Border"))
-                        {
-                            i2++;
-                        }
-                        else
+                        if (!(hits2[i2].transform.name == transform.name || hits2[i2].transform.name.StartsWith("Border")))
                         {
                             hit2 = hits2[i2];
                             break;
                         }
                     }
                     if (i2 == hits2.Length)
+                    {
                         return false;
+                    }
+
                     if (hit2.transform.name == target.name)
                     {
                         return true;
