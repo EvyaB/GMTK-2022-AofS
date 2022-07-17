@@ -17,6 +17,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private StickNoteInfo stickNote;
 
+    [SerializeField]
+    private GameObject gameOverPanel;
+
+    private void Start()
+    {
+        gameOverPanel.SetActive(false);
+    }
+
     public void AddCube()
     {
         var obj = Instantiate(cubePrefab);
@@ -43,7 +51,7 @@ public class UIManager : MonoBehaviour
 
     internal void ShowGameOver()
     {
-        //throw new NotImplementedException();
+        gameOverPanel.SetActive(true);
     }
 
     IEnumerator TestDiceRolls()
