@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // TODO - should probably move this and other Scene loading code here to our Scenemanager script
     private IEnumerator SwitchLevel()
     {
         uiManager.ShowGameWon();
