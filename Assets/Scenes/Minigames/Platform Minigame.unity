@@ -561,10 +561,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   isTopDown: 0
+  fallMultiplier: 3
+  lowJumpMultiplier: 2
+  canJump: 1
   jump: {x: 0, y: 3, z: 0}
   jumpForce: 2
-  gunFireDelay: 0
-  gunShot: {fileID: 0}
 --- !u!1 &994583666
 GameObject:
   m_ObjectHideFlags: 0
