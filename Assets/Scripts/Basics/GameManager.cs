@@ -14,12 +14,33 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool gameOver = false;
 
-
     private void Start()
     {
         gameOver = false;
+
+        if (uiManager == null)
+        {
+            uiManager = GameObject.FindObjectOfType<UIManager>();
+        }
+
         uiManager.ChangeTitle(minigameTitleText);
         uiManager.ShowButtons(usableButtons, actionText);
+    }
+
+    public void WinLevel()
+    {
+        if (!gameOver)
+        {
+            gameOver = true;
+            StartCoroutine(SwitchLevel());
+        }
+    }
+
+    private IEnumerator SwitchLevel()
+    {
+        uiManager.ShowGameWon();
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene(uiManager.GetNextLevelId());
     }
 
     public void InformPlayerDeath(GameObject gameObject)
@@ -36,6 +57,12 @@ public class GameManager : MonoBehaviour
     {
         gameOver = true;
         uiManager.ShowGameOver();
+    }
+
+    private void GameWon()
+    {
+        gameOver = true;
+        uiManager.ShowGameWon();
     }
 
     public void Update()
