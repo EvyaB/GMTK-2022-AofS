@@ -30,6 +30,10 @@ public class playerMovement : MonoBehaviour
     public float minimumTimeBetweenJumps = 0.3f;
     float timerSinceLastJump = 0.0f;
 
+    public float maxCoyoteTime = 0.2f;
+    float timeSinceLeftPlatform = 0.0f;
+    bool wasOnGround = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,15 +80,26 @@ public class playerMovement : MonoBehaviour
         // Reset jumps count if on the ground
         if (isGrounded && timerSinceLastJump <= 0.0f)
         {
+            wasOnGround = true;
+            timeSinceLeftPlatform = 0.0f;
             remainingJumps = maxJumpCounts;
+        }
+        else if (!isGrounded && wasOnGround)
+        {
+            wasOnGround = false;
+            timeSinceLeftPlatform = maxCoyoteTime;
+        }
+        else if (!isGrounded)
+        {
+            timeSinceLeftPlatform -= Time.deltaTime;
         }
 
         if (canJump)
         {
             timerSinceLastJump -= Time.deltaTime;
 
-            // Jump
-            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && remainingJumps > 0 && timerSinceLastJump <= 0.0f)
+            // Jump if possible and pressing jump button
+            if (Input.GetKeyDown(KeyCode.Space) && !isTopDown && remainingJumps > 0 && timerSinceLastJump <= 0.0f && (isGrounded || timeSinceLeftPlatform  >= 0.0f))
             {
                 timerSinceLastJump = minimumTimeBetweenJumps;
                 remainingJumps--;
