@@ -85,73 +85,53 @@ public class EnemyBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, zAngle);
     }
 
-    void findNewDirectionHelp()
+    bool findNewDirectionByAngle(Vector3 directionToPlayer, float alpha, out Vector3 res, Color color)
     {
+        const float raycastLength = 3f;
+        RaycastHit hit;
+        directionToPlayer.x += (float)Math.Sin(20.0f * alpha);
+        directionToPlayer.y += (float)Math.Cos(20.0f * alpha);
+        directionToPlayer.z = 0;
+        var rayDirection = directionToPlayer;
 
+        Debug.DrawRay(transform.position, rayDirection, color, 0.1f, false);
+        if (Physics.Raycast(transform.position, rayDirection, out hit, raycastLength))
+        {
+            Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
+            // enemy can see the player!
+            if (goingAroundObject == "")
+            {
+                goingAroundObject = hit.transform.name;
+            }
+            else if (goingAroundObject != hit.transform.name)
+            {
+                goingAroundObject = "";
+                res = directionToPlayer;
+                return true;
+            }          
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
+            res = directionToPlayer;
+            return true;
+        }
+        res = new Vector3(0,0,0);
+        return false;
     }
 
     private Vector2 findNewDirection()
     {
         Vector3 directionToPlayer = target.transform.position - transform.position;
+        Vector3 res = Vector3.zero;
         for (float i = 0; i < 20; i++)
-        {
-            const float raycastLength = 3f;
-            RaycastHit hit;
-            directionToPlayer.x += (float)Math.Sin(10.0f * i);
-            directionToPlayer.y += (float)Math.Cos(10.0f * i);
-            //directionToPlayer.Normalize();
-            directionToPlayer.z = 0;
-            var rayDirection = directionToPlayer;
-
-            Debug.DrawRay(transform.position, rayDirection, Color.red, 0.1f, false);
-            if (Physics.Raycast(transform.position, rayDirection, out hit, raycastLength))
-            {
-                Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
-                // enemy can see the player!
-                if (goingAroundObject == "")
-                {
-                    goingAroundObject = hit.transform.name;
-                }
-                else if (goingAroundObject != hit.transform.name)
-                {
-                    goingAroundObject = "";
-                    return directionToPlayer;
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
-                return directionToPlayer;
-            }
-            RaycastHit hit2;
-            directionToPlayer.x += (float)Math.Sin(-10.0f * i);
-            directionToPlayer.y += (float)Math.Cos(-10.0f * i);
-            //directionToPlayer.Normalize();
-            directionToPlayer.z = 0;
-            var rayDirection2 = directionToPlayer;
-
-            Debug.DrawRay(transform.position, rayDirection2, Color.blue, 0.1f, false);
-            if (Physics.Raycast(transform.position, rayDirection2, out hit2, raycastLength))
-            {
-                Debug.DrawRay(transform.position, hit2.transform.position - transform.position, Color.cyan, 0.1f, false);
-                // enemy can see the player!
-                if (goingAroundObject == "")
-                {
-                    goingAroundObject = hit2.transform.name;
-                }
-                else if (goingAroundObject != hit2.transform.name)
-                {
-                    goingAroundObject = "";
-                    return directionToPlayer;
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
-                return directionToPlayer;
-            }
+        {        
+            if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.red))
+                return res;
+            if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.blue))
+                return res;
         }
-        return new Vector2(0, 0);
+        return res;
     }
 
     private bool checkIfPlayerIsSeen()
