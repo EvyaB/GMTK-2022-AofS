@@ -134,14 +134,13 @@ public class EnemyBehaviour : MonoBehaviour
         return res;
     }
 
-    private bool checkIfPlayerIsSeen()
+    bool checkIfPlayerIsSeenOnSide(Vector3 origin, Color color)
     {
-        RaycastHit[] hits, hits2;
-        RaycastHit hit, hit2;
-        Vector3 positionOfRightCorener = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * transform.up);
-        var rayDirection = target.transform.position - positionOfRightCorener;
-        Debug.DrawRay(positionOfRightCorener, rayDirection, Color.red, 0.1f, false);
-        hits = Physics.RaycastAll(positionOfRightCorener, rayDirection);
+        RaycastHit[] hits;
+        RaycastHit hit;
+        var rayDirection = target.transform.position - origin;
+        Debug.DrawRay(origin, rayDirection, color, 0.1f, false);
+        hits = Physics.RaycastAll(origin, rayDirection);
         if (hits.Length != 0)
         {
             int i;
@@ -166,43 +165,22 @@ public class EnemyBehaviour : MonoBehaviour
             }
             if (hit.transform.name == target.name)
             {
-                // enemy can see the player!
-                Vector3 offset = GetComponent<BoxCollider>().size / 2;
-                Vector3 positionOfLeftCorener = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * -transform.up);
-                var rayDirection2 = target.transform.position - positionOfLeftCorener;
-                Debug.DrawRay(positionOfLeftCorener, rayDirection2);
-                hits2 = Physics.RaycastAll(positionOfLeftCorener, rayDirection2);
-                Array.Sort(hits2, (x, y) =>
-                {
-                    var distanceX = transform.position - x.transform.position;
-                    var distancey = transform.position - y.transform.position;
-                    return distanceX.magnitude.CompareTo(distancey.magnitude);
-                });
-                if (hits2.Length != 0)
-                {
-                    int i2 = 0;
-                    hit2 = hits2[0];
-                    for (i2 = 0; i2 < hits2.Length; i2++)
-                    {
-                        if (!(hits2[i2].transform.name == transform.name || hits2[i2].transform.name.StartsWith("Border")))
-                        {
-                            hit2 = hits2[i2];
-                            break;
-                        }
-                    }
-                    if (i2 == hits2.Length)
-                    {
-                        return false;
-                    }
-
-                    if (hit2.transform.name == target.name)
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
-        };
-        // there is something obstructing the view
+        }
         return false;
     }
-}
+
+    private bool checkIfPlayerIsSeen()
+    {
+        Vector3 origin = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * transform.up);
+        if (checkIfPlayerIsSeenOnSide(origin, Color.red)){
+            // enemy can see the player!
+            origin = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * -transform.up);
+            if (checkIfPlayerIsSeenOnSide(origin, Color.white))
+                return true;
+        }
+         // there is something obstructing the view
+         return false;
+     }
+    }
