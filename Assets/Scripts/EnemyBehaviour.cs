@@ -10,6 +10,7 @@ public class EnemyBehaviour : MonoBehaviour
     public int MaxDist = 15;
     public GameObject bulletGameObject;
     public bool isTargetVisible = false;
+    public bool foundNewDirection = false;
 
     bool isTryingToFindPlayer = true;
     string goingAroundObject = "";
@@ -24,9 +25,6 @@ public class EnemyBehaviour : MonoBehaviour
     void Start()
     {
         bc = GetComponent<BoxCollider>();
-        //Vector2 direction = target.transform.position - transform.position;
-        //direction.Normalize();
-        //transform.LookAt(gameObject.transform, direction);
         shooter = GetComponent<Shooter>();
     }
 
@@ -85,12 +83,18 @@ public class EnemyBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, zAngle);
     }
 
+    float angleTodRadians(float angle)
+    {
+       return ((float)((Math.PI / 180) * angle));
+    }
+
     bool findNewDirectionByAngle(Vector3 directionToPlayer, float alpha, out Vector3 res, Color color)
     {
+        alpha = angleTodRadians(20.0f * alpha);
         const float raycastLength = 3f;
         RaycastHit hit;
-        directionToPlayer.x += (float)Math.Sin(20.0f * alpha);
-        directionToPlayer.y += (float)Math.Cos(20.0f * alpha);
+        directionToPlayer.x += (float)Math.Sin(alpha);
+        directionToPlayer.y += (float)Math.Cos(alpha);
         directionToPlayer.z = 0;
         var rayDirection = directionToPlayer;
 
@@ -114,7 +118,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
             res = directionToPlayer;
-            return true;
+            return false;
         }
         res = new Vector3(0,0,0);
         return false;
@@ -125,12 +129,19 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 directionToPlayer = target.transform.position - transform.position;
         Vector3 res = Vector3.zero;
         for (float i = 0; i < 20; i++)
-        {        
+        {
             if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.red))
+            {
+                foundNewDirection = true;
                 return res;
+            }
             if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.blue))
+            {
+                foundNewDirection = true;
                 return res;
+            }
         }
+        foundNewDirection = false;
         return res;
     }
 
@@ -173,10 +184,10 @@ public class EnemyBehaviour : MonoBehaviour
 
     private bool checkIfPlayerIsSeen()
     {
-        Vector3 origin = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * transform.up);
+        Vector3 origin = transform.position + (bc.bounds.extents.x/2 * transform.right + bc.bounds.extents.y/2 * transform.up);
         if (checkIfPlayerIsSeenOnSide(origin, Color.red)){
             // enemy can see the player!
-            origin = transform.position + (bc.bounds.extents.x * transform.right + bc.bounds.extents.y * -transform.up);
+            origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y/ 2 * -transform.up);
             if (checkIfPlayerIsSeenOnSide(origin, Color.white))
                 return true;
         }
