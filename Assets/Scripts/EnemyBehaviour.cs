@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 
@@ -35,9 +34,9 @@ public class EnemyBehaviour : MonoBehaviour
     void FixedUpdate()
     {
         LookAtTarget();
-        if (checkIfPlayerIsSeen())
+        isTargetVisible = checkIfPlayerIsSeen();
+        if (isTargetVisible)
         {
-            isTargetVisible = true;
             float distance = Vector2.Distance(transform.position, target.transform.position);
             if (distance >= MinDist)
             {
@@ -58,15 +57,12 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else
         {
-            isTargetVisible = false;
-            if (isTryingToFindPlayer == false)
-            {
-                isTryingToFindPlayer = true;
-            }
+            isTryingToFindPlayer = true;
+
             //Try to find player
-            if (Vector2.Distance(transform.position, target.transform.position) >= MinDist && isTryingToFindPlayer)
+            if (Vector2.Distance(transform.position, target.transform.position) >= MinDist)
             {
-                Vector3 newDirection = findNewDirection();
+                Vector3 newDirection = findNewDirection().normalized;
                 if (newDirection.x != 0 || newDirection.y != 0)
                 {
                     transform.position += newDirection * MoveSpeed * Time.deltaTime;
@@ -99,14 +95,18 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 directionToPlayer = target.transform.position - transform.position;
         for (float i = 0; i < 20; i++)
         {
+            const float raycastLength = 3f;
             RaycastHit hit;
             directionToPlayer.x += (float)Math.Sin(10.0f * i);
             directionToPlayer.y += (float)Math.Cos(10.0f * i);
-            directionToPlayer.Normalize();
+            //directionToPlayer.Normalize();
             directionToPlayer.z = 0;
             var rayDirection = directionToPlayer;
-            if (Physics.Raycast(transform.position, rayDirection, out hit, 6.0f))
+
+            Debug.DrawRay(transform.position, rayDirection, Color.red, 0.1f, false);
+            if (Physics.Raycast(transform.position, rayDirection, out hit, raycastLength))
             {
+                Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
                 // enemy can see the player!
                 if (goingAroundObject == "")
                 {
@@ -120,16 +120,20 @@ public class EnemyBehaviour : MonoBehaviour
             }
             else
             {
+                Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
                 return directionToPlayer;
             }
             RaycastHit hit2;
             directionToPlayer.x += (float)Math.Sin(-10.0f * i);
             directionToPlayer.y += (float)Math.Cos(-10.0f * i);
-            directionToPlayer.Normalize();
+            //directionToPlayer.Normalize();
             directionToPlayer.z = 0;
             var rayDirection2 = directionToPlayer;
-            if (Physics.Raycast(transform.position, rayDirection2, out hit2, 6.0f))
+
+            Debug.DrawRay(transform.position, rayDirection2, Color.blue, 0.1f, false);
+            if (Physics.Raycast(transform.position, rayDirection2, out hit2, raycastLength))
             {
+                Debug.DrawRay(transform.position, hit2.transform.position - transform.position, Color.cyan, 0.1f, false);
                 // enemy can see the player!
                 if (goingAroundObject == "")
                 {
@@ -143,6 +147,7 @@ public class EnemyBehaviour : MonoBehaviour
             }
             else
             {
+                Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
                 return directionToPlayer;
             }
         }
