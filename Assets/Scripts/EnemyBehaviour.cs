@@ -18,6 +18,7 @@ public class EnemyBehaviour : MonoBehaviour
     public float shotDelay = MAX_DELAY;
     float timeSincePrevoiusShot = 0;
     BoxCollider bc;
+    Rigidbody rb;
 
     Shooter shooter;
 
@@ -26,6 +27,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         bc = GetComponent<BoxCollider>();
         shooter = GetComponent<Shooter>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -39,7 +41,9 @@ public class EnemyBehaviour : MonoBehaviour
             if (distance >= MinDist)
             {
                 isTryingToFindPlayer = false;
-                transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                //transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                //rb.AddForce(transform.right * MoveSpeed);
+                rb.velocity += transform.right;
 
                 if (distance <= MaxDist && timeSincePrevoiusShot <= 0)
                 {
@@ -60,18 +64,23 @@ public class EnemyBehaviour : MonoBehaviour
             //Try to find player
             if (Vector2.Distance(transform.position, target.transform.position) >= MinDist)
             {
-                Vector3 newDirection = findNewDirection().normalized;
-                if (newDirection.x != 0 || newDirection.y != 0)
+                var newDirection = findNewDirection();
+                if (newDirection.HasValue)
                 {
-                    transform.position += newDirection * MoveSpeed * Time.deltaTime;
+                    //transform.position += newDirection.Value.normalized * MoveSpeed * Time.deltaTime;
+                    rb.velocity = (newDirection.Value.normalized + rb.velocity) / 2;
                 }
                 else
                 {
-                    transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                    //transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                    rb.velocity += transform.right;
                 }
             }
         }
+        Wallphobia();
         timeSincePrevoiusShot -= Time.deltaTime;
+        Debug.DrawRay(transform.position, rb.velocity, Color.green, 0.3f, false);
+        rb.velocity = rb.velocity.normalized * MoveSpeed;
     }
 
     private void LookAtTarget()
@@ -83,66 +92,58 @@ public class EnemyBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, zAngle);
     }
 
-    float angleTodRadians(float angle)
+    bool findNewDirectionByAngle(Vector3 directionToPlayer, float angle, out Vector3 rayDirection, Color color, float rayLength = 6f)
     {
-       return ((float)((Math.PI / 180) * angle));
-    }
-
-    bool findNewDirectionByAngle(Vector3 directionToPlayer, float alpha, out Vector3 res, Color color)
-    {
-        alpha = angleTodRadians(20.0f * alpha);
-        const float raycastLength = 3f;
         RaycastHit hit;
-        directionToPlayer.x += (float)Math.Sin(alpha);
-        directionToPlayer.y += (float)Math.Cos(alpha);
-        directionToPlayer.z = 0;
-        var rayDirection = directionToPlayer;
+        rayDirection = Quaternion.Euler(0, 0, angle) * directionToPlayer;
 
         Debug.DrawRay(transform.position, rayDirection, color, 0.1f, false);
-        if (Physics.Raycast(transform.position, rayDirection, out hit, raycastLength))
+        if (Physics.Raycast(transform.position, rayDirection, out hit, rayLength))
         {
-            Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
-            // enemy can see the player!
-            if (goingAroundObject == "")
-            {
-                goingAroundObject = hit.transform.name;
-            }
-            else if (goingAroundObject != hit.transform.name)
-            {
-                goingAroundObject = "";
-                res = directionToPlayer;
-                return true;
-            }          
+            //Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
+
+            // Ignore arena borders 
+            return hit.transform.GetComponent<ArenaBorder>() != null;
         }
         else
         {
-            Debug.DrawRay(transform.position, directionToPlayer, Color.yellow, 0.1f, false);
-            res = directionToPlayer;
-            return false;
+            //Debug.DrawRay(transform.position, rayDirection, Color.yellow, 0.1f, false);
+            return true;
         }
-        res = new Vector3(0,0,0);
-        return false;
     }
 
-    private Vector2 findNewDirection()
+    private Vector3? findNewDirection()
     {
         Vector3 directionToPlayer = target.transform.position - transform.position;
-        Vector3 res = Vector3.zero;
-        for (float i = 0; i < 20; i++)
+        Vector3 res;
+        for (float i = 0; i < 10; i++)
         {
-            if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.red))
+            if (findNewDirectionByAngle(directionToPlayer, i * 20, out res, Color.clear))
             {
                 foundNewDirection = true;
                 return res;
             }
-            if (findNewDirectionByAngle(directionToPlayer, i, out res, Color.blue))
+            if (findNewDirectionByAngle(directionToPlayer, -i * 20, out res, Color.clear))
             {
                 foundNewDirection = true;
                 return res;
             }
         }
         foundNewDirection = false;
-        return res;
+        return null;
+    }
+
+    private void Wallphobia()
+    {
+        Vector3 res;
+        for (float i = 0; i < 72; i++)
+        {
+            if (!findNewDirectionByAngle(target.transform.position - transform.position, i * 5, out res, Color.clear, 1f))
+            {
+                rb.velocity += res * -1;
+                break;
+            }
+        }
     }
 
     bool checkIfPlayerIsSeenOnSide(Vector3 origin, Color color)
@@ -184,14 +185,17 @@ public class EnemyBehaviour : MonoBehaviour
 
     private bool checkIfPlayerIsSeen()
     {
-        Vector3 origin = transform.position + (bc.bounds.extents.x/2 * transform.right + bc.bounds.extents.y/2 * transform.up);
-        if (checkIfPlayerIsSeenOnSide(origin, Color.red)){
+        Vector3 origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y / 2 * transform.up);
+        if (checkIfPlayerIsSeenOnSide(origin, Color.red))
+        {
             // enemy can see the player!
-            origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y/ 2 * -transform.up);
-            if (checkIfPlayerIsSeenOnSide(origin, Color.white))
+            origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y / 2 * -transform.up);
+            if (checkIfPlayerIsSeenOnSide(origin, Color.red))
+            {
                 return true;
+            }
         }
-         // there is something obstructing the view
-         return false;
-     }
+        // there is something obstructing the view
+        return false;
     }
+}
