@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7456151001238531632}
   - component: {fileID: 233060404}
   m_Layer: 12
-  m_Name: PickableDiceD6
+  m_Name: PickableDiceD6_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c9ac9c6b31450740a720dfef2eb1964, type: 2}
+  - {fileID: 2100000, guid: fe9fe026dfd4cf749a39ad1fac2332f5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,4 +130,9 @@ MonoBehaviour:
   shouldRotate: 1
   rotationSpeed: 30
   rotationDirection: {x: -1, y: 0, z: 0}
+  shouldRespawn: 0
+  shouldDestroy: 1
   destoryDelay: 0.1
+  respawnDelay: 5
+  diceType: 1
+  maxRollValue: 6
