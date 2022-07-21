@@ -11,6 +11,7 @@ public class EnemyBehaviour : MonoBehaviour
     public GameObject bulletGameObject;
     public bool isTargetVisible = false;
     public bool foundNewDirection = false;
+    public bool wasLastDirectionPositive = false;
 
     bool isTryingToFindPlayer = true;
     string goingAroundObject = "";
@@ -68,7 +69,7 @@ public class EnemyBehaviour : MonoBehaviour
                 if (newDirection.HasValue)
                 {
                     //transform.position += newDirection.Value.normalized * MoveSpeed * Time.deltaTime;
-                    rb.velocity = (newDirection.Value.normalized + rb.velocity) / 2;
+                    rb.velocity = (newDirection.Value.normalized + rb.velocity.normalized);
                 }
                 else
                 {
@@ -79,8 +80,8 @@ public class EnemyBehaviour : MonoBehaviour
         }
         Wallphobia();
         timeSincePrevoiusShot -= Time.deltaTime;
-        Debug.DrawRay(transform.position, rb.velocity, Color.green, 0.3f, false);
         rb.velocity = rb.velocity.normalized * MoveSpeed;
+        Debug.DrawRay(transform.position, rb.velocity, Color.yellow, 0.3f, false);
     }
 
     private void LookAtTarget()
@@ -92,18 +93,20 @@ public class EnemyBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, zAngle);
     }
 
-    bool findNewDirectionByAngle(Vector3 directionToPlayer, float angle, out Vector3 rayDirection, Color color, float rayLength = 6f)
+    bool findNewDirectionByAngle(Vector3 directionToPlayer, float angle, out Vector3 rayDirection, Color color, float rayLength = 2f)
     {
         RaycastHit hit;
         rayDirection = Quaternion.Euler(0, 0, angle) * directionToPlayer;
 
-        Debug.DrawRay(transform.position, rayDirection, color, 0.1f, false);
-        if (Physics.Raycast(transform.position, rayDirection, out hit, rayLength))
+        Debug.DrawRay(transform.position, rayDirection.normalized * rayLength, color, 0.1f, false);
+        if (Physics.Raycast(transform.position, rayDirection.normalized, out hit, rayLength))
         {
             //Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
 
             // Ignore arena borders 
-            return hit.transform.GetComponent<ArenaBorder>() != null;
+            //return hit.transform.GetComponent<ArenaBorder>() != null;
+            //Debug.DrawRay(transform.position, rayDirection, Color.red, 0.1f, false);
+            return false;
         }
         else
         {
@@ -115,19 +118,42 @@ public class EnemyBehaviour : MonoBehaviour
     private Vector3? findNewDirection()
     {
         Vector3 directionToPlayer = target.transform.position - transform.position;
-        Vector3 res;
-        for (float i = 0; i < 10; i++)
+        var dir = directionToPlayer;
+        const int incAngle = 9;
+        const int searchSteps = 10;
+        const int rayLength = 2;
+        Vector3 resPositive = new(), resNegative = new();
+        bool neg = false, pos = false;
+        for (float i = 0; i < searchSteps && !wasLastDirectionPositive; i++)
         {
-            if (findNewDirectionByAngle(directionToPlayer, i * 20, out res, Color.clear))
+            if (findNewDirectionByAngle(dir.normalized, -i * incAngle, out resNegative, Color.red, rayLength))
             {
-                foundNewDirection = true;
-                return res;
+                neg = true;
+                break;
             }
-            if (findNewDirectionByAngle(directionToPlayer, -i * 20, out res, Color.clear))
+        }
+        for (float i = 0; i < searchSteps && (wasLastDirectionPositive || !neg); i++)
+        {
+            if (findNewDirectionByAngle(dir, i * incAngle, out resPositive, Color.cyan, rayLength))
             {
-                foundNewDirection = true;
-                return res;
+                pos = true;
+                break;
             }
+        }
+          if (neg)
+        {
+            wasLastDirectionPositive = false;
+            return resNegative;
+        }
+        else if (pos)
+        {
+            wasLastDirectionPositive = true;
+            return resPositive;
+        }
+        else
+        {
+            wasLastDirectionPositive = !wasLastDirectionPositive;
+            return null;
         }
         foundNewDirection = false;
         return null;
@@ -138,10 +164,14 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 res;
         for (float i = 0; i < 72; i++)
         {
-            if (!findNewDirectionByAngle(target.transform.position - transform.position, i * 5, out res, Color.clear, 1f))
+            var safeGourd = Mathf.Sqrt(Mathf.Pow(bc.bounds.extents.x, 2) + Mathf.Pow(bc.bounds.extents.y, 2));
+            if (!findNewDirectionByAngle(transform.right, i * 5, out res, Color.clear, safeGourd))
             {
-                rb.velocity += res * -1;
-                break;
+                //Debug.DrawRay(transform.position, res * 3, Color.blue);
+                //Debug.DrawRay(transform.position, rb.velocity, Color.green);
+                rb.velocity += res.normalized * -1;
+                //Debug.DrawRay(transform.position, rb.velocity, Color.red);
+                return;
             }
         }
     }
@@ -151,7 +181,7 @@ public class EnemyBehaviour : MonoBehaviour
         RaycastHit[] hits;
         RaycastHit hit;
         var rayDirection = target.transform.position - origin;
-        Debug.DrawRay(origin, rayDirection, color, 0.1f, false);
+        //Debug.DrawRay(origin, rayDirection, color, 0.1f, false);
         hits = Physics.RaycastAll(origin, rayDirection);
         if (hits.Length != 0)
         {
