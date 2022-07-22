@@ -10,7 +10,7 @@ public class PlayerControlerTopDown : MonoBehaviour
     Rigidbody rb;
 
     SpriteRenderer sr;
-    SpriteAtlas atlas;
+    public SpriteAtlas atlas;
 
     // Start is called before the first frame update
     void Start()
