@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class HookController : MonoBehaviour
 {
+    [SerializeField] float minPullDistance = 0.5f;
     [SerializeField]
     private float speed;
     [SerializeField]
-    float backwardSpeed;
+    float hookedSpeed;
     bool isHooked = false;
     bool onTheWayBack = false;
     PullableObject hookedObj;
@@ -27,11 +28,15 @@ public class HookController : MonoBehaviour
             onTheWayBack = true;
 
             hookedObj = c.gameObject.GetComponent<PullableObject>();
-            if (hookedObj != null)
+            if (hookedObj != null && Input.GetKey(KeyCode.Mouse0))
             {
-                isHooked = true;
-                relativePositionToHookedObj = c.transform.position - transform.position;
-
+                var distance = Vector3.Distance(pullCasterInstance.transform.position, hookedObj.transform.position);
+                var colliderExtent =  ((Vector2)hookedObj.GetComponent<BoxCollider>().bounds.extents).magnitude;
+                if (distance - colliderExtent > minPullDistance)
+                {
+                    isHooked = true;
+                    relativePositionToHookedObj = c.transform.position - transform.position;
+                }
             }
 
         });
@@ -40,22 +45,24 @@ public class HookController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        if (isHooked)
-        {
-            hookedObj.transform.position = transform.position + relativePositionToHookedObj;
-        }
-    }
-    private void LateUpdate()
-    {
         if (!onTheWayBack)
         {
             transform.Translate(Vector3.right * speed * Time.deltaTime);
         }
         else
         {
+            var backSpeed = isHooked ? hookedSpeed : speed;
             var dir = pullCasterInstance.transform.position - gameObject.transform.position;
-            transform.Translate(dir.normalized* backwardSpeed * Time.deltaTime, Space.World);
+            transform.Translate(dir.normalized * backSpeed * Time.deltaTime, Space.World);
         }
+        if (isHooked && hookedObj != null)
+        {
+            hookedObj.transform.position = transform.position + relativePositionToHookedObj;
+        }
+
+    }
+    private void LateUpdate()
+    {
+
     }
 }

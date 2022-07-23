@@ -14,7 +14,6 @@ public class EnemyBehaviour : MonoBehaviour
     public bool wasLastDirectionPositive = false;
 
     bool isTryingToFindPlayer = true;
-    string goingAroundObject = "";
     const float MAX_DELAY = 0.3f;
     public float shotDelay = MAX_DELAY;
     float timeSincePrevoiusShot = 0;
@@ -140,7 +139,7 @@ public class EnemyBehaviour : MonoBehaviour
                 break;
             }
         }
-          if (neg)
+        if (neg)
         {
             wasLastDirectionPositive = false;
             return resNegative;
@@ -150,12 +149,7 @@ public class EnemyBehaviour : MonoBehaviour
             wasLastDirectionPositive = true;
             return resPositive;
         }
-        else
-        {
-            wasLastDirectionPositive = !wasLastDirectionPositive;
-            return null;
-        }
-        foundNewDirection = false;
+        wasLastDirectionPositive = !wasLastDirectionPositive;
         return null;
     }
 

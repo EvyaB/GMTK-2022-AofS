@@ -17,10 +17,13 @@ public class PullCaster : MonoBehaviour
     void Start()
     {
         lr = gameObject.GetComponent<LineRenderer>();
-        lr.positionCount = 2;
-        var b = GetComponent<BoxCollider>().bounds;
+        var b = GetComponent<BoxCollider>().bounds; 
         safeGourd = Mathf.Sqrt(Mathf.Pow(b.extents.x, 2) + Mathf.Pow(b.extents.y, 2));
-        HookTrigger.returnedEvent.AddListener(() => isHookCasted = false);
+        HookTrigger.returnedEvent.AddListener(() =>
+        {
+            isHookCasted = false;
+            lr.positionCount = 0;
+        });
 
     }
 
@@ -35,6 +38,7 @@ public class PullCaster : MonoBehaviour
 
         if (isHookCasted)
         {
+            lr.positionCount = 2;
             lr.SetPosition(0, transform.position);
             lr.SetPosition(1, hookInstance.transform.position);
         }
