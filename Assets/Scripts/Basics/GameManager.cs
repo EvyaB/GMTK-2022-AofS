@@ -115,7 +115,7 @@ public partial class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (gameOver && Input.GetKeyDown(KeyCode.Mouse0))
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(0);
         }
