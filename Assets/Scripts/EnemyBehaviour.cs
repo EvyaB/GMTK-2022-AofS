@@ -6,25 +6,15 @@ public class EnemyBehaviour : MonoBehaviour
 {
     public GameObject target;
     public int MoveSpeed = 1;
-    public int MinDist = 1;
-    public int MaxDist = 15;
-    public GameObject bulletGameObject;
     public bool isTargetVisible = false;
     public bool wasLastDirectionPositive = false;
-
-    const float MAX_DELAY = 0.3f;
-    public float shotDelay = MAX_DELAY;
-    float timeSincePrevoiusShot = 0;
     BoxCollider bc;
     Rigidbody rb;
-
-    Shooter shooter;
 
     // Start is called before the first frame update
     void Start()
     {
         bc = GetComponent<BoxCollider>();
-        shooter = GetComponent<Shooter>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -35,43 +25,23 @@ public class EnemyBehaviour : MonoBehaviour
         isTargetVisible = checkIfPlayerIsSeen();
         if (isTargetVisible)
         {
-            float distance = Vector2.Distance(transform.position, target.transform.position);
-            if (distance >= MinDist)
-            {
-                rb.velocity += transform.right;
-
-                //if (distance <= MaxDist && timeSincePrevoiusShot <= 0)
-                //{
-                //    //Shoot
-                //    Vector3 direction = Vector3.right;
-                //    direction.z = 0;
-                //    Vector3 position = transform.position;
-                //    position.z = 0;
-                //    shooter.Shoot(position, transform.rotation, direction);
-                //    timeSincePrevoiusShot = shotDelay;
-                //}
-            }
+            rb.velocity += transform.right;
         }
         else
         {
-            //Try to find player
-            if (Vector2.Distance(transform.position, target.transform.position) >= MinDist)
+            var newDirection = findNewDirection();
+            if (newDirection.HasValue)
             {
-                var newDirection = findNewDirection();
-                if (newDirection.HasValue)
-                {
-                    //transform.position += newDirection.Value.normalized * MoveSpeed * Time.deltaTime;
-                    rb.velocity = (newDirection.Value.normalized + rb.velocity.normalized);
-                }
-                else
-                {
-                    //transform.position += transform.right * MoveSpeed * Time.deltaTime;
-                    rb.velocity += transform.right;
-                }
+                //transform.position += newDirection.Value.normalized * MoveSpeed * Time.deltaTime;
+                rb.velocity = (newDirection.Value.normalized + rb.velocity.normalized);
+            }
+            else
+            {
+                //transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                rb.velocity += transform.right;
             }
         }
         Wallphobia();
-        timeSincePrevoiusShot -= Time.deltaTime;
         rb.velocity = rb.velocity.normalized * MoveSpeed;
         Debug.DrawRay(transform.position, rb.velocity, Color.yellow, 0.3f, false);
     }
