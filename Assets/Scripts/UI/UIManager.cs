@@ -20,9 +20,13 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverPanel;
 
+    [SerializeField]
+    private GameObject gameWonPanel;
+
     private void Start()
     {
         gameOverPanel.SetActive(false);
+        gameWonPanel.SetActive(false);
     }
 
     public void AddCube()
@@ -31,17 +35,25 @@ public class UIManager : MonoBehaviour
         cubes.Add(obj.GetComponent<CubeUi>());
     }
 
-    public void RollDices()
+    public void RollDices(DiceType diceType, int maxVal)
     {
         foreach (CubeUi cube in cubes)
         {
-            cube.RollDice();
+            if (cube.GetDiceType() == diceType)
+            {
+                cube.RollDice(maxVal);
+            }
         }
     }
 
     public void ChangeTitle(string newTitle)
     {
         stickNote.ChangeTitle(newTitle);
+    }
+
+    public int GetNextLevelId()
+    {
+        return cubes[0].GetCurrentValue();
     }
 
     public void ShowButtons(List<KeyCode> buttons, string actionText)
@@ -53,13 +65,27 @@ public class UIManager : MonoBehaviour
     {
         gameOverPanel.SetActive(true);
     }
+    internal void ShowGameWon()
+    {
+        gameWonPanel.SetActive(true);
+    }
 
     IEnumerator TestDiceRolls()
     {
         while (true)
         {
-            RollDices();
+            RollDices(DiceType.Minigame, 3);
             yield return new WaitForSeconds(2);
         }
+    }
+
+    internal void ShowTimer(float levelTimerSeconds)
+    {
+        stickNote.SetupTimer(levelTimerSeconds);
+    }
+
+    internal void HideTimer()
+    {
+        stickNote.HideTimer();
     }
 }

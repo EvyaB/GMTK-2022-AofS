@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 public class EnemyBehaviour : MonoBehaviour
 {
     public GameObject target;
@@ -9,128 +10,221 @@ public class EnemyBehaviour : MonoBehaviour
     public int MaxDist = 15;
     public GameObject bulletGameObject;
     public bool isTargetVisible = false;
+    public bool foundNewDirection = false;
+    public bool wasLastDirectionPositive = false;
 
     bool isTryingToFindPlayer = true;
     string goingAroundObject = "";
+    const float MAX_DELAY = 0.3f;
+    public float shotDelay = MAX_DELAY;
+    float timeSincePrevoiusShot = 0;
+    BoxCollider bc;
+    Rigidbody rb;
+
+    Shooter shooter;
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 direction = target.transform.position - transform.position;
-        direction.Normalize();
-        transform.LookAt(gameObject.transform, direction);
+        bc = GetComponent<BoxCollider>();
+        shooter = GetComponent<Shooter>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (checkIfPlayerIsSeen())
+        LookAtTarget();
+        isTargetVisible = checkIfPlayerIsSeen();
+        if (isTargetVisible)
         {
-            isTargetVisible = true;
-            transform.LookAt(target.transform.position);
             float distance = Vector2.Distance(transform.position, target.transform.position);
             if (distance >= MinDist)
             {
                 isTryingToFindPlayer = false;
-                transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+                //transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                //rb.AddForce(transform.right * MoveSpeed);
+                rb.velocity += transform.right;
 
-                if (distance <= MaxDist)
+                if (distance <= MaxDist && timeSincePrevoiusShot <= 0)
                 {
                     //Shoot
-
+                    Vector3 direction = Vector3.right;
+                    direction.z = 0;
+                    Vector3 position = transform.position;
+                    position.z = 0;
+                    shooter.Shoot(position, transform.rotation, direction);
+                    timeSincePrevoiusShot = shotDelay;
                 }
             }
         }
         else
         {
-            isTargetVisible = false;
-            if (isTryingToFindPlayer == false)
-                isTryingToFindPlayer = true;
+            isTryingToFindPlayer = true;
+
             //Try to find player
-            transform.LookAt(target.transform.position);
-            if (Vector2.Distance(transform.position, target.transform.position) >= MinDist && isTryingToFindPlayer)
+            if (Vector2.Distance(transform.position, target.transform.position) >= MinDist)
             {
-                Vector3 newDirection = findNewDirection();
-                if (newDirection.x != 0 || newDirection.y != 0)
-                    transform.position += newDirection * MoveSpeed * Time.deltaTime;
+                var newDirection = findNewDirection();
+                if (newDirection.HasValue)
+                {
+                    //transform.position += newDirection.Value.normalized * MoveSpeed * Time.deltaTime;
+                    rb.velocity = (newDirection.Value.normalized + rb.velocity.normalized);
+                }
                 else
-                    transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+                {
+                    //transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                    rb.velocity += transform.right;
+                }
+            }
+        }
+        Wallphobia();
+        timeSincePrevoiusShot -= Time.deltaTime;
+        rb.velocity = rb.velocity.normalized * MoveSpeed;
+        Debug.DrawRay(transform.position, rb.velocity, Color.yellow, 0.3f, false);
+    }
+
+    private void LookAtTarget()
+    {
+        //transform.LookAt(target.transform.position);
+        var targetDir = target.transform.position - transform.position;
+        targetDir.Normalize();
+        float zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, zAngle);
+    }
+
+    bool findNewDirectionByAngle(Vector3 directionToPlayer, float angle, out Vector3 rayDirection, Color color, float rayLength = 2f)
+    {
+        RaycastHit hit;
+        rayDirection = Quaternion.Euler(0, 0, angle) * directionToPlayer;
+
+        Debug.DrawRay(transform.position, rayDirection.normalized * rayLength, color, 0.1f, false);
+        if (Physics.Raycast(transform.position, rayDirection.normalized, out hit, rayLength))
+        {
+            //Debug.DrawRay(transform.position, hit.transform.position - transform.position, Color.cyan, 0.1f, false);
+
+            // Ignore arena borders 
+            //return hit.transform.GetComponent<ArenaBorder>() != null;
+            //Debug.DrawRay(transform.position, rayDirection, Color.red, 0.1f, false);
+            return false;
+        }
+        else
+        {
+            //Debug.DrawRay(transform.position, rayDirection, Color.yellow, 0.1f, false);
+            return true;
+        }
+    }
+
+    private Vector3? findNewDirection()
+    {
+        Vector3 directionToPlayer = target.transform.position - transform.position;
+        var dir = directionToPlayer;
+        const int incAngle = 9;
+        const int searchSteps = 10;
+        const int rayLength = 2;
+        Vector3 resPositive = new(), resNegative = new();
+        bool neg = false, pos = false;
+        for (float i = 0; i < searchSteps && !wasLastDirectionPositive; i++)
+        {
+            if (findNewDirectionByAngle(dir.normalized, -i * incAngle, out resNegative, Color.red, rayLength))
+            {
+                neg = true;
+                break;
+            }
+        }
+        for (float i = 0; i < searchSteps && (wasLastDirectionPositive || !neg); i++)
+        {
+            if (findNewDirectionByAngle(dir, i * incAngle, out resPositive, Color.cyan, rayLength))
+            {
+                pos = true;
+                break;
+            }
+        }
+          if (neg)
+        {
+            wasLastDirectionPositive = false;
+            return resNegative;
+        }
+        else if (pos)
+        {
+            wasLastDirectionPositive = true;
+            return resPositive;
+        }
+        else
+        {
+            wasLastDirectionPositive = !wasLastDirectionPositive;
+            return null;
+        }
+        foundNewDirection = false;
+        return null;
+    }
+
+    private void Wallphobia()
+    {
+        Vector3 res;
+        for (float i = 0; i < 72; i++)
+        {
+            var safeGourd = Mathf.Sqrt(Mathf.Pow(bc.bounds.extents.x, 2) + Mathf.Pow(bc.bounds.extents.y, 2));
+            if (!findNewDirectionByAngle(transform.right, i * 5, out res, Color.clear, safeGourd))
+            {
+                //Debug.DrawRay(transform.position, res * 3, Color.blue);
+                //Debug.DrawRay(transform.position, rb.velocity, Color.green);
+                rb.velocity += res.normalized * -1;
+                //Debug.DrawRay(transform.position, rb.velocity, Color.red);
+                return;
             }
         }
     }
 
-    private Vector2 findNewDirection()
+    bool checkIfPlayerIsSeenOnSide(Vector3 origin, Color color)
     {
-        Vector3 directionToPlayer = target.transform.position - transform.position;
-        for (float i = 0; i < 20; i++)
+        RaycastHit[] hits;
+        RaycastHit hit;
+        var rayDirection = target.transform.position - origin;
+        //Debug.DrawRay(origin, rayDirection, color, 0.1f, false);
+        hits = Physics.RaycastAll(origin, rayDirection);
+        if (hits.Length != 0)
         {
-            RaycastHit hit;
-            directionToPlayer.x += (float)Math.Sin(10.0f * i);
-            directionToPlayer.y += (float)Math.Cos(10.0f * i);
-            directionToPlayer.Normalize();
-            directionToPlayer.z = 0;
-            var rayDirection = directionToPlayer;
-            if (Physics.Raycast(transform.position, rayDirection, out hit))
+            int i;
+            hit = hits[0];
+            Array.Sort(hits, (x, y) =>
             {
-                // enemy can see the player!
-                if (goingAroundObject == "")
-                    goingAroundObject = hit.transform.name;
-                else if (goingAroundObject != hit.transform.name)
+                var distanceX = transform.position - x.transform.position;
+                var distancey = transform.position - y.transform.position;
+                return distanceX.magnitude.CompareTo(distancey.magnitude);
+            });
+            for (i = 0; i < hits.Length; i++)
+            {
+                if (!(hits[i].transform.name == transform.name || hits[i].transform.name.StartsWith("Border")))
                 {
-                    goingAroundObject = "";
-                    return directionToPlayer;
+                    hit = hits[i];
+                    break;
                 }
             }
-            else
+            if (i == hits.Length)
             {
-                return directionToPlayer;
+                return false;
             }
-            RaycastHit hit2;
-            directionToPlayer.x += (float)Math.Sin(-10.0f * i);
-            directionToPlayer.y += (float)Math.Cos(-10.0f * i);
-            directionToPlayer.Normalize();
-            directionToPlayer.z = 0;
-            var rayDirection2 = directionToPlayer;
-            if (Physics.Raycast(transform.position, rayDirection2, out hit2))
+            if (hit.transform.name == target.name)
             {
-                // enemy can see the player!
-                if (goingAroundObject == "")
-                    goingAroundObject = hit.transform.name;
-                else if (goingAroundObject != hit.transform.name)
-                {
-                    goingAroundObject = "";
-                    return directionToPlayer;
-                }
-            }
-            else
-            {
-                return directionToPlayer;
+                return true;
             }
         }
-        return new Vector2(0, 0);
+        return false;
     }
 
     private bool checkIfPlayerIsSeen()
     {
-        RaycastHit hit, hit2;
-        Vector3 positionOfRightCorener = transform.position + transform.GetComponent<BoxCollider>().size / 2;
-        var rayDirection = -target.transform.position + positionOfRightCorener;
-        Debug.DrawRay(positionOfRightCorener, rayDirection);
-        if (Physics.Raycast(positionOfRightCorener, rayDirection, out hit))
+        Vector3 origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y / 2 * transform.up);
+        if (checkIfPlayerIsSeenOnSide(origin, Color.red))
         {
-            if (hit.transform.name == target.name)
+            // enemy can see the player!
+            origin = transform.position + (bc.bounds.extents.x / 2 * transform.right + bc.bounds.extents.y / 2 * -transform.up);
+            if (checkIfPlayerIsSeenOnSide(origin, Color.red))
             {
-                // enemy can see the player!
-                Vector3 positionOfLeftCorener = transform.position - GetComponent<BoxCollider>().size / 2;
-                var rayDirection2 = - target.transform.position + positionOfLeftCorener;
-                Debug.DrawRay(positionOfLeftCorener, rayDirection2);
-                if (Physics.Raycast(positionOfLeftCorener, rayDirection2, out hit2))
-                    if (hit2.transform.name == target.name)
-                    {
-                        return true;
-                    }
+                return true;
             }
-        };
+        }
         // there is something obstructing the view
         return false;
     }

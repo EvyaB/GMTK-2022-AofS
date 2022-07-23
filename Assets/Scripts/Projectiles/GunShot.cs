@@ -12,6 +12,7 @@ public class GunShot : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        StartCoroutine(killAfterTime());
     }
 
     // Update is called once per frame
@@ -27,5 +28,11 @@ public class GunShot : MonoBehaviour
     {
         if (other.tag != "Player")
             Destroy(gameObject);
+    }
+
+    private IEnumerator killAfterTime()
+    {
+        yield return new WaitForSeconds(10.0f);
+        Destroy(transform.gameObject);
     }
 }
