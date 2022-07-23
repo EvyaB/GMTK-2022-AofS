@@ -48,17 +48,17 @@ public class playerMovement : MonoBehaviour
 
         if (isTopDown)
         {
-            rb.useGravity = false;
-            maxJumpCounts = 0; // can't jump in top down game
-            canJump = false;
+            //rb.useGravity = false;
+            //maxJumpCounts = 0; // can't jump in top down game
+            //canJump = false;
 
-            //Movement
-            float yMove = Input.GetAxis("Vertical");
-            rb.velocity = new Vector2(xMove, yMove) * speed * Time.deltaTime;
+            ////Movement
+            //float yMove = Input.GetAxis("Vertical");
+            //rb.velocity = new Vector2(xMove, yMove) * speed * Time.deltaTime;
 
-            // Rotation
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
+            //// Rotation
+            //Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
         }
         else
         {
@@ -148,9 +148,14 @@ public class playerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+
         float distanceDown = 0.01f;
-        var capsuleCollider = this.GetComponent<CapsuleCollider>();
-        distanceDown += capsuleCollider.bounds.size.y / 2;
+        Collider collider = this.GetComponent<CapsuleCollider>() ;
+        if(collider == null)
+        {
+            collider = GetComponent<BoxCollider>();
+        }
+        distanceDown += collider.bounds.size.y / 2;
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * distanceDown);
     }
