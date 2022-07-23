@@ -17,7 +17,7 @@ SpriteAtlas:
       textureCompression: 0
       filterMode: 1
       generateMipMaps: 0
-      readable: 0
+      readable: 1
       crunchedCompression: 0
       sRGB: 1
     platformSettings: []
@@ -37,8 +37,16 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 21300000, guid: b88167509e081f3479e61c210eb94728, type: 3}
+  - {fileID: 21300000, guid: 732010840837ace469b364293a8b3ae2, type: 3}
+  - {fileID: 21300000, guid: f3e1b8f5a70873241a24dcb23c129536, type: 3}
+  - {fileID: 21300000, guid: d07e317906119d84f91d20008dcafe81, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - top-down-back
+  - top-down-right
+  - top-down-front
+  - top-down-left
   m_RenderDataMap: {}
   m_Tag: top-down-character-sprite
   m_IsVariant: 0

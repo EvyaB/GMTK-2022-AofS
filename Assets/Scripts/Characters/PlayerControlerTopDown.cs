@@ -29,9 +29,15 @@ public class PlayerControlerTopDown : MonoBehaviour
         float yMove = Input.GetAxis("Vertical");
         rb.velocity = new Vector2(xMove, yMove) * speed;
 
-        if (xMove != 0)
+        if (xMove > 0)
             sr.sprite = atlas.GetSprite("top-down-right");
- 
+        if (xMove < 0)
+            sr.sprite = atlas.GetSprite("top-down-left");
+        if (yMove > 0)
+            sr.sprite = atlas.GetSprite("top-down-back");
+        if (yMove < 0)
+            sr.sprite = atlas.GetSprite("top-down-front");
+
         // Rotation
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
