@@ -39,7 +39,7 @@ public class PlayerControlerTopDown : MonoBehaviour
             sr.sprite = atlas.GetSprite("top-down-front");
 
         // Rotation
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
+       // Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+       // rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
     }
 }
