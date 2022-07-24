@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.U2D;
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -23,12 +23,18 @@ public class EnemyBehaviour : MonoBehaviour
 
     Shooter shooter;
 
+    public SpriteAtlas atlas;
+    SpriteRenderer sr;
+
+    public float zAngle;
+
     // Start is called before the first frame update
     void Start()
     {
         bc = GetComponent<BoxCollider>();
         shooter = GetComponent<Shooter>();
         rb = GetComponent<Rigidbody>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -89,8 +95,20 @@ public class EnemyBehaviour : MonoBehaviour
         //transform.LookAt(target.transform.position);
         var targetDir = target.transform.position - transform.position;
         targetDir.Normalize();
-        float zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+        /*float*/ zAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, zAngle);
+        if (zAngle > 360)
+            zAngle -= 360;
+        if (zAngle > 180)
+            zAngle -= 180;
+        if (zAngle > -45 && zAngle < 45)
+            sr.sprite = atlas.GetSprite("frog-right");
+        if (zAngle > 45 && zAngle < 135)
+            sr.sprite = atlas.GetSprite("frog-back");
+        if ((zAngle > 135 && zAngle < 180)  || (zAngle>-135 && zAngle<-180))
+            sr.sprite = atlas.GetSprite("frog-left");
+        if ((zAngle > -135 && zAngle < -45))
+            sr.sprite = atlas.GetSprite("frog-front");
     }
 
     bool findNewDirectionByAngle(Vector3 directionToPlayer, float angle, out Vector3 rayDirection, Color color, float rayLength = 2f)
