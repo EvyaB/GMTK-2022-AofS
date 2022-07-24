@@ -19,7 +19,7 @@ public partial class GameManager : MonoBehaviour
     [SerializeField] private float levelTimerSeconds = 20.0f;
     private Coroutine timerEndCoroutine;
 
-    private void Start()
+    internal void Start()
     {
         gameOver = false;
 
@@ -34,7 +34,7 @@ public partial class GameManager : MonoBehaviour
         SetupLevelTimer();
     }
 
-    public void GetTimerSettings(bool hasTimer, bool loseAtTimerEnd, float timerVal)
+    public void SetTimerSettings(bool hasTimer, bool loseAtTimerEnd, float timerVal)
     {
         this.hasTimer = hasTimer;
         this.loseAtTimerEnd = loseAtTimerEnd;
@@ -115,7 +115,7 @@ public partial class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (gameOver && Input.GetKeyDown(KeyCode.Mouse0))
+        if (gameOver && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(0);
         }

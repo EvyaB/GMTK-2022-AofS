@@ -21,9 +21,5 @@ public class PlayerControlerTopDown : MonoBehaviour
         float xMove = Input.GetAxis("Horizontal");
         float yMove = Input.GetAxis("Vertical");
         rb.velocity = new Vector2(xMove, yMove) * speed;
-
-        // Rotation
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rb.MoveRotation(Quaternion.LookRotation(Vector3.forward, mousePos - transform.position));
     }
 }
