@@ -40,15 +40,17 @@ public class SpawnManager : MonoBehaviour
         return new Vector3(Random.Range(xMin, xMax), Random.Range(yMin, yMax), 0);
     }
 
-    public void SpawnRandomPointInBound(GameObject obj, uint count = 1, float safeGroudDistance = 0)
+    public GameObject[] SpawnRandomPointInBound(GameObject obj, uint count = 1, float safeGroudDistance = 0)
     {
+        var spawnies = new GameObject[count];
         for (int i = 0; i < count; i++)
         {
-            SpawnSingleRandomPointInBound(obj, safeGroudDistance);
+            spawnies[i] = SpawnSingleRandomPointInBound(obj, safeGroudDistance);
         }
+        return spawnies;
     }
 
-    void SpawnSingleRandomPointInBound(GameObject obj, float safeGroudDistance)
+    GameObject SpawnSingleRandomPointInBound(GameObject obj, float safeGroudDistance)
     {
         var spawnBounds = GetComponent<SpriteRenderer>().bounds;
 
@@ -60,8 +62,7 @@ public class SpawnManager : MonoBehaviour
             // No other object in bounds of obj collider aside from obj 
             if (IsOccupied(rndPoint, bc.bounds.extents + (Vector3.one * safeGroudDistance)))
             {
-                Instantiate(obj, rndPoint, obj.transform.rotation);
-                return;
+                return Instantiate(obj, rndPoint, obj.transform.rotation);
             }
         }
 

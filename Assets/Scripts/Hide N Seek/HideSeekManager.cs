@@ -1,52 +1,69 @@
+using System.Linq;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class HideSeekManager : MonoBehaviour
+public class HideSeekManager : GameManager
 {
     [SerializeField] GameObject countDownDigit;
-    [SerializeField] GameObject hideTitle;
+    [SerializeField] GameObject enemyPrefab;
     GameObject canvas;
-    GameManager gm;
     EnemyBehaviour[] enemies;
     public int hideTime = 5;
+    public uint enemiesCount = 3;
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
         canvas = transform.GetChild(0).gameObject;
-        gm = FindObjectOfType<GameManager>();
-        enemies = FindObjectsOfType<EnemyBehaviour>();
+        enemies = SpawnManager.Instance.SpawnRandomPointInBound(enemyPrefab, enemiesCount, 0.5f)
+            .Select((e) => e.GetComponent<EnemyBehaviour>())
+            .ToArray();
+        enemies.ToList().ForEach((e) => e.target = FindObjectOfType<PlayerControlerTopDown>().gameObject);
 
-        SetMinigameActive(false);
-        StartCoroutine(CountDown(hideTime));
-
+        SetEnemiesActive(false);
+        StartCoroutine(SeekCountDown(hideTime));
     }
 
-    void SetMinigameActive(bool active)
+    void SetEnemiesActive(bool active)
     {
         foreach (var e in enemies)
         {
             e.enabled = active;
         }
-        gm.gameObject.SetActive(active);
     }
 
     void StartSeek()
     {
-        Destroy(hideTitle);
-        SetMinigameActive(true);
+        SetEnemiesActive(true);
+        base.Start();
     }
 
-    IEnumerator CountDown(int countdownLength)
+    IEnumerator SeekCountDown(int countdownLength)
     {
+        const int START_END_LABELS = 2;
+        countdownLength += START_END_LABELS;
+
         for (int i = countdownLength; i >= 0; i--)
         {
             var d = Instantiate(countDownDigit, canvas.transform);
-            d.GetComponent<TMP_Text>().text = i.ToString();
-            yield return new WaitForSeconds(1);
+            var text = i.ToString();
+            var displayTime = 1;
+            if (i == countdownLength)
+            {
+                text = "HIDE\nBEGIN\nNOW";
+                displayTime = 2;
+            }
+            else if (i == 0)
+            {
+                text = "SEEK\nBEGIN";
+                displayTime = 2;
+            }
+            d.GetComponent<TMP_Text>().text = text;
+            yield return new WaitForSeconds(displayTime);
             Destroy(d);
         }
 
         StartSeek();
     }
+
 }
